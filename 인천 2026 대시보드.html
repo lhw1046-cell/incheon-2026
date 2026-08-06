@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>인천 유나이티드 2026 · 시즌 대시보드</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+:root{
+  --navy:#0B1F45; --navy2:#132C5E; --blue:#1E5FA8; --sky:#3EA6E8;
+  --gold:#E2B33C; --red:#D8453B; --green:#1E9B5B; --gray:#7C879B;
+  --bg:#070E1E; --card:#0F1C36; --card2:#152442; --line:#1E3159; --txt:#E8EEF8; --dim:#9AA8C0;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--txt);
+  font-family:'Pretendard','Apple SD Gothic Neo','Malgun Gothic',system-ui,sans-serif;
+  -webkit-font-smoothing:antialiased;padding-bottom:60px}
+.wrap{max-width:1180px;margin:0 auto;padding:0 18px}
+
+/* HERO */
+.hero{position:relative;overflow:hidden;background:
+   radial-gradient(1100px 380px at 12% -30%,rgba(62,166,232,.30),transparent 60%),
+   radial-gradient(800px 320px at 92% 0%,rgba(226,179,60,.16),transparent 60%),
+   linear-gradient(160deg,#0B1F45 0%,#0A1730 65%,#070E1E 100%);
+   border-bottom:1px solid var(--line);padding:38px 0 30px}
+.hero:after{content:"";position:absolute;inset:0;
+  background:repeating-linear-gradient(115deg,rgba(255,255,255,.028) 0 2px,transparent 2px 26px);
+  pointer-events:none}
+.hero .wrap{position:relative;z-index:2}
+.crest{display:flex;align-items:center;gap:14px;margin-bottom:16px}
+.crest .mark{width:46px;height:46px;border-radius:12px;flex:none;
+  background:linear-gradient(145deg,var(--sky),var(--blue) 55%,var(--navy));
+  display:grid;place-items:center;font-weight:900;font-size:17px;color:#fff;
+  box-shadow:0 6px 22px rgba(30,95,168,.55)}
+h1{font-size:26px;letter-spacing:-.4px;font-weight:800;line-height:1.15}
+.sub{color:var(--dim);font-size:12.5px;margin-top:3px;letter-spacing:.2px}
+
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:11px;margin-top:22px}
+.kpi{background:linear-gradient(150deg,rgba(255,255,255,.075),rgba(255,255,255,.022));
+  border:1px solid var(--line);border-radius:14px;padding:14px 15px;backdrop-filter:blur(4px)}
+.kpi .l{font-size:10.5px;color:var(--dim);letter-spacing:.9px;text-transform:uppercase;font-weight:600}
+.kpi .v{font-size:29px;font-weight:800;margin-top:4px;line-height:1;
+  font-variant-numeric:tabular-nums;letter-spacing:-1px}
+.kpi .n{font-size:11px;color:var(--dim);margin-top:5px}
+.kpi.hl .v{color:var(--gold)}
+
+/* SECTION */
+section{margin-top:34px}
+h2{font-size:15px;font-weight:750;letter-spacing:-.2px;margin-bottom:12px;
+  display:flex;align-items:center;gap:9px}
+h2:before{content:"";width:3px;height:15px;border-radius:2px;
+  background:linear-gradient(var(--sky),var(--blue))}
+h2 .tag{font-size:10.5px;color:var(--dim);font-weight:500;letter-spacing:.3px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+@media(max-width:860px){.grid2,.grid3{grid-template-columns:1fr}}
+
+/* TABLE */
+table{width:100%;border-collapse:collapse;font-size:12.5px;font-variant-numeric:tabular-nums}
+th{color:var(--dim);font-size:10.5px;font-weight:650;letter-spacing:.6px;text-align:right;
+  padding:7px 6px;border-bottom:1px solid var(--line);white-space:nowrap}
+th:nth-child(-n+2){text-align:left}
+td{padding:7px 6px;text-align:right;border-bottom:1px solid rgba(30,49,89,.5);white-space:nowrap}
+td:nth-child(-n+2){text-align:left}
+tbody tr:hover{background:rgba(62,166,232,.07)}
+tr.me{background:linear-gradient(90deg,rgba(226,179,60,.20),rgba(226,179,60,.05))}
+tr.me td{font-weight:750;color:#FFE9A8}
+tr.me:hover{background:linear-gradient(90deg,rgba(226,179,60,.28),rgba(226,179,60,.08))}
+.zone{display:inline-block;width:3px;height:15px;border-radius:2px;margin-right:8px;
+  vertical-align:-3px}
+.tdot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:7px;
+  vertical-align:0;box-shadow:0 0 0 1.5px rgba(255,255,255,.10)}
+.pos{color:var(--dim);font-weight:650}
+.pts{font-weight:800;color:#fff}
+.pos-gd{color:var(--green)} .neg-gd{color:var(--red)}
+
+/* FORM PILLS */
+.form{display:flex;flex-wrap:wrap;gap:5px}
+.pill{width:27px;height:27px;border-radius:8px;display:grid;place-items:center;
+  font-size:12px;font-weight:900;color:#0A0F1A;cursor:default;position:relative;
+  transition:transform .12s}
+.pill:hover{transform:translateY(-3px) scale(1.08);z-index:5}
+.pill.W{background:linear-gradient(145deg,#4FE39B,#2BC57E)}
+.pill.D{background:linear-gradient(145deg,#CBD3E0,#A6B0C2)}
+.pill.L{background:linear-gradient(145deg,#FF9188,#F2685C)}
+.pill .tip{display:none;position:absolute;bottom:130%;left:50%;transform:translateX(-50%);
+  background:#050B18;border:1px solid var(--line);border-radius:8px;padding:7px 10px;
+  font-size:11px;font-weight:500;white-space:nowrap;color:var(--txt);
+  box-shadow:0 8px 26px rgba(0,0,0,.65)}
+.pill:hover .tip{display:block}
+
+/* BARS */
+.bar{height:7px;border-radius:4px;background:rgba(255,255,255,.08);overflow:hidden;min-width:56px}
+.bar>i{display:block;height:100%;border-radius:4px;
+  background:linear-gradient(90deg,var(--blue),var(--sky))}
+.bar.g>i{background:linear-gradient(90deg,#158049,#25B36B)}
+
+/* SPLIT */
+.split{display:grid;grid-template-columns:1fr auto 1fr;gap:8px;align-items:center;
+  padding:9px 2px;border-bottom:1px solid rgba(30,49,89,.5)}
+.split:last-child{border:0}
+.split .lbl{text-align:center;font-size:10.5px;color:var(--dim);letter-spacing:.5px;
+  min-width:74px;font-weight:600}
+.split .h,.split .a{display:flex;align-items:center;gap:9px;font-size:13px;
+  font-variant-numeric:tabular-nums;font-weight:700}
+.split .h{justify-content:flex-end}
+.split .h .bar{transform:scaleX(-1)}
+
+.chartbox{position:relative;height:250px}
+.chartbox.tall{height:330px}
+.legend{display:flex;gap:14px;font-size:11px;color:var(--dim);margin-top:9px;flex-wrap:wrap}
+.legend b{display:inline-block;width:9px;height:9px;border-radius:3px;margin-right:5px;
+  vertical-align:0px}
+
+/* MATCH LIST */
+.mrow{display:grid;grid-template-columns:34px 62px 1fr 56px 1fr 30px;gap:9px;align-items:center;
+  padding:8px 6px;border-bottom:1px solid rgba(30,49,89,.5);font-size:12.5px}
+.mrow:hover{background:rgba(62,166,232,.06)}
+.mrow .r{color:var(--dim);font-size:11px;font-weight:650}
+.mrow .d{color:var(--dim);font-size:11px}
+.mrow .sc{text-align:center;font-weight:800;font-variant-numeric:tabular-nums;
+  background:rgba(255,255,255,.055);border-radius:7px;padding:3px 0}
+.mrow .rr{width:22px;height:22px;border-radius:6px;display:grid;place-items:center;
+  font-size:11px;font-weight:900;color:#0A0F1A;justify-self:end}
+.mrow .goals{font-size:11px;color:var(--sky)}
+.ha{font-size:9.5px;padding:1px 5px;border-radius:4px;margin-left:6px;font-weight:700;
+  letter-spacing:.4px}
+.ha.H{background:rgba(226,179,60,.20);color:var(--gold)}
+.ha.A{background:rgba(62,166,232,.16);color:var(--sky)}
+
+.note{font-size:11px;color:var(--dim);margin-top:10px;line-height:1.6}
+.foot{margin-top:40px;padding-top:16px;border-top:1px solid var(--line);
+  color:var(--gray);font-size:11px;line-height:1.7}
+.chip{display:inline-block;font-size:10px;padding:2px 8px;border-radius:20px;
+  background:rgba(62,166,232,.14);color:var(--sky);font-weight:650;margin-left:6px}
+.scroll{overflow-x:auto}
+</style>
+</head>
+<body>
+
+<div class="hero"><div class="wrap">
+  <div class="crest">
+    <div class="mark">IU</div>
+    <div>
+      <h1>인천 유나이티드 · 2026 시즌</h1>
+      <div class="sub" id="asof"></div>
+    </div>
+  </div>
+  <div class="kpis" id="kpis"></div>
+</div></div>
+
+<div class="wrap">
+
+<section>
+  <h2>K리그1 리그순위 <span class="tag" id="tblAsOf"></span></h2>
+  <div class="card scroll">
+    <table id="tbl"><thead><tr>
+      <th>순위</th><th>팀</th><th>경기</th><th>승</th><th>무</th><th>패</th>
+      <th>득점</th><th>실점</th><th>득실</th><th>승점</th><th style="width:110px">승점 바</th>
+    </tr></thead><tbody></tbody></table>
+    <div class="note">
+      <span class="zone" style="background:var(--sky)"></span>ACL 엘리트 리그스테이지 &nbsp;
+      <span class="zone" style="background:var(--blue)"></span>ACL 플레이오프 &nbsp;
+      <span class="zone" style="background:var(--red)"></span>강등 PO
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>시즌 폼 가이드 <span class="tag">라운드 순 · 마우스를 올리면 상세</span></h2>
+  <div class="card"><div class="form" id="form"></div></div>
+</section>
+
+<section>
+  <h2>라운드별 순위 변동 <span class="tag">범례를 클릭하면 다른 팀도 켜고 끌 수 있습니다</span></h2>
+  <div class="card">
+    <div class="chartbox tall"><canvas id="cRank"></canvas></div>
+    <div class="note" id="rankNote"></div>
+  </div>
+</section>
+
+<div class="grid2" style="margin-top:14px">
+  <div class="card">
+    <h2 style="margin-bottom:10px">라운드별 득점 · 실점</h2>
+    <div class="chartbox"><canvas id="cGoals"></canvas></div>
+  </div>
+  <div class="card">
+    <h2 style="margin-bottom:10px">홈경기 관중 추이</h2>
+    <div class="chartbox"><canvas id="cAtt"></canvas></div>
+    <div class="note" id="attNote"></div>
+  </div>
+</div>
+
+<section>
+  <h2>홈 vs 원정</h2>
+  <div class="card" id="split"></div>
+</section>
+
+<div class="grid2" style="margin-top:14px">
+  <div class="card">
+    <h2 style="margin-bottom:10px">선수별 공격포인트</h2>
+    <div class="chartbox tall"><canvas id="cGA"></canvas></div>
+  </div>
+  <div class="card">
+    <h2 style="margin-bottom:10px">주심별 전적</h2>
+    <div class="scroll"><table id="ref"><thead><tr>
+      <th>주심</th><th>경기</th><th>승</th><th>무</th><th>패</th><th>승점</th><th>평균</th>
+    </tr></thead><tbody></tbody></table></div>
+  </div>
+</div>
+
+<section>
+  <h2>선수 기록 <span class="tag">열 제목 클릭 → 정렬</span></h2>
+  <div class="card scroll">
+    <table id="pl"><thead><tr>
+      <th data-k="name">이름</th><th data-k="app">출전</th><th data-k="start">선발</th>
+      <th data-k="sub">교체</th><th data-k="g">득점</th><th data-k="a">도움</th>
+      <th data-k="ga">공격P</th><th style="width:120px">출전 분포</th>
+    </tr></thead><tbody></tbody></table>
+  </div>
+</section>
+
+<section>
+  <h2>경기 결과 <span class="tag">K리그1 정규리그</span></h2>
+  <div class="card" id="mlist"></div>
+</section>
+
+<div class="foot">
+  데이터: <b>인천 2026 기록.xlsx</b> · 리그순위 출처 soccer365 / K리그 공식<br>
+  <span id="ftime"></span>
+</div>
+</div>
+
+<script>
+const D = {"matches": [{"comp": "K리그", "date": "2월 28일", "dow": "토", "round": 1, "opp": "서울", "ha": "홈", "gf": 1, "ga": 2, "res": "패", "scorers": ["무고사"], "assists": [], "att": 18108, "ref": "이동준"}, {"comp": "K리그", "date": "3월 7일", "dow": "토", "round": 2, "opp": "광주", "ha": "원정", "gf": 2, "ga": 3, "res": "패", "scorers": ["오후성", "서재민"], "assists": ["김명순", "무고사"], "att": null, "ref": "최현재"}, {"comp": "K리그", "date": "3월 15일", "dow": "일", "round": 3, "opp": "포항", "ha": "원정", "gf": 1, "ga": 1, "res": "무", "scorers": ["무고사"], "assists": [], "att": null, "ref": "설태환"}, {"comp": "K리그", "date": "3월 18일", "dow": "수", "round": 4, "opp": "대전", "ha": "홈", "gf": 1, "ga": 3, "res": "패", "scorers": ["무고사"], "assists": ["이주용"], "att": 6360, "ref": "김종혁"}, {"comp": "K리그", "date": "3월 22일", "dow": "일", "round": 5, "opp": "안양", "ha": "원정", "gf": 1, "ga": 0, "res": "승", "scorers": ["무고사"], "assists": [], "att": null, "ref": "채상협"}, {"comp": "K리그", "date": "4월 5일", "dow": "일", "round": 6, "opp": "김천", "ha": "홈", "gf": 2, "ga": 1, "res": "승", "scorers": ["무고사", "무고사"], "assists": ["이명주"], "att": 8239, "ref": "최철준"}, {"comp": "K리그", "date": "4월 11일", "dow": "토", "round": 7, "opp": "울산", "ha": "홈", "gf": 1, "ga": 2, "res": "패", "scorers": ["무고사"], "assists": ["서재민"], "att": 11358, "ref": "송민석"}, {"comp": "K리그", "date": "4월 18일", "dow": "토", "round": 8, "opp": "부천", "ha": "원정", "gf": 2, "ga": 2, "res": "무", "scorers": ["페리어", "제르소"], "assists": ["김명순"], "att": null, "ref": "신용준"}, {"comp": "K리그", "date": "4월 21일", "dow": "화", "round": 9, "opp": "전북", "ha": "원정", "gf": 2, "ga": 1, "res": "승", "scorers": ["이명주", "이동률"], "assists": ["최승구"], "att": null, "ref": "김종혁"}, {"comp": "K리그", "date": "4월 25일", "dow": "토", "round": 10, "opp": "제주", "ha": "홈", "gf": 1, "ga": 0, "res": "승", "scorers": ["페리어"], "assists": ["이동률"], "att": 8371, "ref": "최현재"}, {"comp": "K리그", "date": "5월 2일", "dow": "토", "round": 11, "opp": "강원", "ha": "홈", "gf": 0, "ga": 1, "res": "패", "scorers": [], "assists": [], "att": 11404, "ref": "고형진"}, {"comp": "K리그", "date": "5월 5일", "dow": "화", "round": 12, "opp": "대전", "ha": "원정", "gf": 0, "ga": 0, "res": "무", "scorers": [], "assists": [], "att": null, "ref": "김종혁"}, {"comp": "K리그", "date": "5월 9일", "dow": "토", "round": 13, "opp": "김천", "ha": "원정", "gf": 3, "ga": 0, "res": "승", "scorers": ["이비자", "이동률", "페리어"], "assists": ["이명주"], "att": null, "ref": "신용준"}, {"comp": "K리그", "date": "5월 12일", "dow": "화", "round": 14, "opp": "포항", "ha": "홈", "gf": 0, "ga": 1, "res": "패", "scorers": [], "assists": [], "att": 6620, "ref": "설태환"}, {"comp": "K리그", "date": "5월 16일", "dow": "토", "round": 15, "opp": "광주", "ha": "홈", "gf": 4, "ga": 0, "res": "승", "scorers": ["이비자", "페리어", "제르소", "이청용"], "assists": ["이주용", "이청용", "이동률"], "att": 11128, "ref": "김우성"}, {"comp": "K리그", "date": "7월 5일", "dow": "일", "round": 16, "opp": "서울", "ha": "원정", "gf": 0, "ga": 1, "res": "패", "scorers": [], "assists": [], "att": null, "ref": "신용준"}, {"comp": "K리그", "date": "7월 12일", "dow": "일", "round": 17, "opp": "안양", "ha": "홈", "gf": 0, "ga": 1, "res": "패", "scorers": [], "assists": [], "att": 10616, "ref": "최철준"}, {"comp": "K리그", "date": "7월 18일", "dow": "토", "round": 18, "opp": "전북", "ha": "홈", "gf": 1, "ga": 0, "res": "승", "scorers": ["제르소"], "assists": [], "att": 12984, "ref": "박병진"}, {"comp": "K리그", "date": "7월 21일", "dow": "화", "round": 19, "opp": "울산", "ha": "원정", "gf": 2, "ga": 1, "res": "승", "scorers": ["페리어", "무고사"], "assists": ["김성민"], "att": null, "ref": "송민석"}, {"comp": "K리그", "date": "7월 26일", "dow": "일", "round": 20, "opp": "부천", "ha": "홈", "gf": 1, "ga": 1, "res": "무", "scorers": ["페리어"], "assists": ["정치인"], "att": 8623, "ref": "최철준"}, {"comp": "K리그", "date": "8월 2일", "dow": "일", "round": 21, "opp": "제주", "ha": "원정", "gf": 3, "ga": 3, "res": "무", "scorers": ["김건희", "김건희", "이주용"], "assists": ["이주용", "이주용", "이청용"], "att": null, "ref": "김대용"}, {"comp": "K리그", "date": "9월 27일", "dow": "일", "round": 22, "opp": "강원", "ha": "원정", "gf": null, "ga": null, "res": null, "scorers": [], "assists": [], "att": null, "ref": null}, {"comp": "K리그", "date": "8월 16일", "dow": "일", "round": 23, "opp": "김천", "ha": "홈", "gf": null, "ga": null, "res": null, "scorers": [], "assists": [], "att": null, "ref": null}, {"comp": "K리그", "date": "8월 23일", "dow": "일", "round": 24, "opp": "광주", "ha": "원정", "gf": null, "ga": null, "res": null, "scorers": [], "assists": [], "att": null, "ref": null}, {"comp": "K리그", "date": "8월 26일", "dow": "수", "round": 25, "opp": "안양", "ha": "원정", "gf": null, "ga": null, "res": null, "scorers": [], "assists": [], "att": null, "ref": null}, {"comp": "K리그", "date": "8월 30일", "dow": "일", "round": 26, "opp": "전북", "ha": "홈", "gf": null, "ga": null, "res": null, "scorers": [], "assists": [], "att": null, "ref": null}, {"comp": "K리그", "date": "9월 5일", "dow": "토", "round": 27, "opp": "서울", "ha": "원정", "gf": null, "ga": null, "res": null, "scorers": [], "assists": [], "att": null, "ref": null}, {"comp": "K리그", "date": "9월 8일", "dow": "화", "round": 28, "opp": "부천", "ha": "홈", "gf": null, "ga": null, "res": null, "scorers": [], "assists": [], "att": null, "ref": null}, {"comp": "K리그", "date": "9월 12일", "dow": "토", "round": 29, "opp": "울산", "ha": "원정", "gf": null, "ga": null, "res": null, "scorers": [], "assists": [], "att": null, "ref": null}, {"comp": "K리그", "date": "9월 20일", "dow": "일", "round": 30, "opp": "대전", "ha": "홈", "gf": null, "ga": null, "res": null, "scorers": [], "assists": [], "att": null, "ref": null}, {"comp": "K리그", "date": "10월 9일", "dow": "금", "round": 31, "opp": "포항", "ha": "홈", "gf": null, "ga": null, "res": null, "scorers": [], "assists": [], "att": null, "ref": null}, {"comp": "K리그", "date": "10월 18일", "dow": "일", "round": 32, "opp": "강원", "ha": "원정", "gf": null, "ga": null, "res": null, "scorers": [], "assists": [], "att": null, "ref": null}, {"comp": "K리그", "date": "10월 24일", "dow": "토", "round": 33, "opp": "제주", "ha": "홈", "gf": null, "ga": null, "res": null, "scorers": [], "assists": [], "att": null, "ref": null}, {"comp": "K리그", "date": null, "dow": null, "round": 34, "opp": null, "ha": null, "gf": null, "ga": null, "res": null, "scorers": [], "assists": [], "att": null, "ref": null}, {"comp": "K리그", "date": null, "dow": null, "round": 35, "opp": null, "ha": null, "gf": null, "ga": null, "res": null, "scorers": [], "assists": [], "att": null, "ref": null}, {"comp": "K리그", "date": null, "dow": null, "round": 36, "opp": null, "ha": null, "gf": null, "ga": null, "res": null, "scorers": [], "assists": [], "att": null, "ref": null}, {"comp": "K리그", "date": null, "dow": null, "round": 37, "opp": null, "ha": null, "gf": null, "ga": null, "res": null, "scorers": [], "assists": [], "att": null, "ref": null}, {"comp": "K리그", "date": null, "dow": null, "round": 38, "opp": null, "ha": null, "gf": null, "ga": null, "res": null, "scorers": [], "assists": [], "att": null, "ref": null}, {"comp": "FA컵", "date": "7월29일", "dow": "수", "round": "3R", "opp": "김포", "ha": "홈", "gf": 0, "ga": 1, "res": "패", "scorers": [], "assists": [], "att": 3873, "ref": "박진호"}], "players": [{"name": "무고사", "app": 18, "start": 12, "sub": 6, "g": 8, "a": 1, "ga": 9}, {"name": "박승호", "app": 10, "start": 6, "sub": 4, "g": 0, "a": 0, "ga": 0}, {"name": "이동률", "app": 20, "start": 11, "sub": 9, "g": 2, "a": 2, "ga": 4}, {"name": "페리어", "app": 18, "start": 10, "sub": 8, "g": 6, "a": 0, "ga": 6}, {"name": "제르소", "app": 21, "start": 15, "sub": 6, "g": 3, "a": 0, "ga": 3}, {"name": "서재민", "app": 21, "start": 21, "sub": 0, "g": 1, "a": 1, "ga": 2}, {"name": "이명주", "app": 20, "start": 17, "sub": 3, "g": 1, "a": 2, "ga": 3}, {"name": "오후성", "app": 8, "start": 7, "sub": 1, "g": 1, "a": 0, "ga": 1}, {"name": "이청용", "app": 21, "start": 12, "sub": 9, "g": 1, "a": 2, "ga": 3}, {"name": "정치인", "app": 15, "start": 6, "sub": 9, "g": 0, "a": 1, "ga": 1}, {"name": "이케르", "app": 9, "start": 2, "sub": 7, "g": 0, "a": 0, "ga": 0}, {"name": "김성민", "app": 8, "start": 4, "sub": 4, "g": 0, "a": 1, "ga": 1}, {"name": "정원진", "app": 1, "start": 1, "sub": 0, "g": 0, "a": 0, "ga": 0}, {"name": "백민규", "app": 1, "start": 0, "sub": 1, "g": 0, "a": 0, "ga": 0}, {"name": "문지환", "app": 1, "start": 0, "sub": 1, "g": 0, "a": 0, "ga": 0}, {"name": "김영환", "app": 3, "start": 1, "sub": 2, "g": 0, "a": 0, "ga": 0}, {"name": "오준엽", "app": 0, "start": 0, "sub": 0, "g": 0, "a": 0, "ga": 0}, {"name": "박경섭", "app": 12, "start": 9, "sub": 3, "g": 0, "a": 0, "ga": 0}, {"name": "김건희", "app": 14, "start": 13, "sub": 1, "g": 2, "a": 0, "ga": 2}, {"name": "이비자", "app": 20, "start": 20, "sub": 0, "g": 2, "a": 0, "ga": 2}, {"name": "김명순", "app": 19, "start": 19, "sub": 0, "g": 0, "a": 2, "ga": 2}, {"name": "이주용", "app": 20, "start": 17, "sub": 3, "g": 1, "a": 4, "ga": 5}, {"name": "최승구", "app": 14, "start": 2, "sub": 12, "g": 0, "a": 1, "ga": 1}, {"name": "여승원", "app": 5, "start": 2, "sub": 3, "g": 0, "a": 0, "ga": 0}, {"name": "이상기", "app": 3, "start": 2, "sub": 1, "g": 0, "a": 0, "ga": 0}, {"name": "고정민", "app": 0, "start": 0, "sub": 0, "g": 0, "a": 0, "ga": 0}, {"name": "이준섭", "app": 0, "start": 0, "sub": 0, "g": 0, "a": 0, "ga": 0}, {"name": "정태욱", "app": 0, "start": 0, "sub": 0, "g": 0, "a": 0, "ga": 0}, {"name": "강영훈", "app": 0, "start": 0, "sub": 0, "g": 0, "a": 0, "ga": 0}, {"name": "김연수", "app": 0, "start": 0, "sub": 0, "g": 0, "a": 0, "ga": 0}, {"name": "김동헌", "app": 17, "start": 16, "sub": 1, "g": 0, "a": 0, "ga": 0}, {"name": "이태희", "app": 5, "start": 5, "sub": 0, "g": 0, "a": 0, "ga": 0}, {"name": "이상현", "app": 0, "start": 0, "sub": 0, "g": 0, "a": 0, "ga": 0}, {"name": "왕민준", "app": 0, "start": 0, "sub": 0, "g": 0, "a": 0, "ga": 0}, {"name": "홍시후", "app": 0, "start": 0, "sub": 0, "g": 0, "a": 0, "ga": 0}, {"name": "민경현", "app": 0, "start": 0, "sub": 0, "g": 0, "a": 0, "ga": 0}, {"name": "성힘찬", "app": 0, "start": 0, "sub": 0, "g": 0, "a": 0, "ga": 0}, {"name": "박호민", "app": 6, "start": 1, "sub": 5, "g": 0, "a": 0, "ga": 0}], "split": [{"k": "홈", "pld": 11, "w": 4, "d": 1, "l": 6, "pts": 13, "gf": 12, "ga": 12, "gd": 0, "ppg": 1.18181818181818}, {"k": "원정", "pld": 10, "w": 4, "d": 4, "l": 2, "pts": 16, "gf": 16, "ga": 12, "gd": 4, "ppg": 1.6}, {"k": "총합", "pld": 21, "w": 8, "d": 5, "l": 8, "pts": 29, "gf": 28, "ga": 24, "gd": 4, "ppg": 1.38095238095238}], "table": [{"pos": 1, "team": "서울", "pld": 21, "w": 13, "d": 4, "l": 4, "gf": 35, "ga": 17, "gd": 18, "pts": 43}, {"pos": 2, "team": "울산", "pld": 21, "w": 10, "d": 4, "l": 7, "gf": 33, "ga": 30, "gd": 3, "pts": 34}, {"pos": 3, "team": "전북", "pld": 21, "w": 9, "d": 7, "l": 5, "gf": 27, "ga": 16, "gd": 11, "pts": 34}, {"pos": 4, "team": "강원", "pld": 21, "w": 8, "d": 8, "l": 5, "gf": 25, "ga": 17, "gd": 8, "pts": 32}, {"pos": 5, "team": "안양", "pld": 21, "w": 7, "d": 9, "l": 5, "gf": 29, "ga": 26, "gd": 3, "pts": 30}, {"pos": 6, "team": "인천", "pld": 21, "w": 8, "d": 5, "l": 8, "gf": 28, "ga": 24, "gd": 4, "pts": 29}, {"pos": 7, "team": "제주", "pld": 21, "w": 7, "d": 7, "l": 7, "gf": 22, "ga": 23, "gd": -1, "pts": 28}, {"pos": 8, "team": "포항", "pld": 21, "w": 8, "d": 4, "l": 9, "gf": 20, "ga": 22, "gd": -2, "pts": 28}, {"pos": 9, "team": "대전", "pld": 21, "w": 5, "d": 8, "l": 8, "gf": 25, "ga": 23, "gd": 2, "pts": 23}, {"pos": 10, "team": "김천", "pld": 21, "w": 4, "d": 11, "l": 6, "gf": 22, "ga": 28, "gd": -6, "pts": 23}, {"pos": 11, "team": "부천", "pld": 21, "w": 5, "d": 8, "l": 8, "gf": 21, "ga": 25, "gd": -4, "pts": 23}, {"pos": 12, "team": "광주", "pld": 21, "w": 1, "d": 7, "l": 13, "gf": 11, "ga": 47, "gd": -36, "pts": 10}], "refs": [{"name": "이동준", "pld": 1, "w": 0, "d": 0, "l": 1, "pts": 0}, {"name": "최현재", "pld": 2, "w": 1, "d": 0, "l": 1, "pts": 3}, {"name": "설태환", "pld": 2, "w": 0, "d": 1, "l": 1, "pts": 1}, {"name": "김종혁", "pld": 3, "w": 1, "d": 1, "l": 1, "pts": 4}, {"name": "채상협", "pld": 1, "w": 1, "d": 0, "l": 0, "pts": 3}, {"name": "최철준", "pld": 3, "w": 1, "d": 1, "l": 1, "pts": 4}, {"name": "송민석", "pld": 2, "w": 1, "d": 0, "l": 1, "pts": 3}, {"name": "신용준", "pld": 3, "w": 1, "d": 1, "l": 1, "pts": 4}, {"name": "고형진", "pld": 1, "w": 0, "d": 0, "l": 1, "pts": 0}, {"name": "김우성", "pld": 1, "w": 1, "d": 0, "l": 0, "pts": 3}, {"name": "박병진", "pld": 1, "w": 1, "d": 0, "l": 0, "pts": 3}, {"name": "김대용", "pld": 1, "w": 0, "d": 1, "l": 0, "pts": 1}], "att": {"kl": {"n": 11, "tot": 113811, "avg": 10346.4545454545, "py_avg": 10173.7894736842, "yoy": 0.0169715593404951}, "fa": {"n": 1, "tot": 3873, "avg": 3873, "py_avg": 1151.5, "yoy": 2.36343899261832}}, "runner": [{"round": 1, "opp": "서울", "rank": 1, "dist": 12288, "res": "패"}, {"round": 2, "opp": "광주", "rank": 1, "dist": 13443, "res": "패"}, {"round": 3, "opp": "포항", "rank": 1, "dist": 12841, "res": "무"}, {"round": 4, "opp": "대전", "rank": 1, "dist": 13297, "res": "패"}, {"round": 5, "opp": "안양", "rank": 4, "dist": 12124, "res": "승"}, {"round": 6, "opp": "김천", "rank": 4, "dist": 12034, "res": "승"}, {"round": 7, "opp": "울산", "rank": 1, "dist": 13411, "res": "패"}, {"round": 8, "opp": "부천", "rank": 1, "dist": 12077, "res": "무"}, {"round": 9, "opp": "전북", "rank": 2, "dist": 12721, "res": "승"}, {"round": 10, "opp": "제주", "rank": 6, "dist": 11755, "res": "승"}, {"round": 11, "opp": "강원", "rank": 6, "dist": 11846, "res": "패"}, {"round": 12, "opp": "대전", "rank": 1, "dist": 12124, "res": "무"}, {"round": 13, "opp": "김천", "rank": 3, "dist": 12096, "res": "승"}, {"round": 14, "opp": "포항", "rank": 3, "dist": 12122, "res": "패"}, {"round": 15, "opp": "광주", "rank": 6, "dist": 11820, "res": "승"}], "lineups": [{"round": 1, "opp": "서울", "start": ["김동헌", "김건희", "이비자", "김명순", "이주용", "서재민", "이케르", "제르소", "오후성", "박승호", "무고사"], "sub": ["이청용", "여승원", "정치인", "이명주", "박호민"]}, {"round": 2, "opp": "광주", "start": ["김동헌", "김건희", "이비자", "김명순", "이주용", "서재민", "이명주", "제르소", "정치인", "오후성", "무고사"], "sub": ["이동률", "이청용", "이케르", "박경섭", "여승원"]}, {"round": 3, "opp": "포항", "start": ["김동헌", "김건희", "이비자", "김명순", "이주용", "서재민", "이명주", "제르소", "정치인", "오후성", "무고사"], "sub": ["이동률", "이청용"]}, {"round": 4, "opp": "대전", "start": ["김동헌", "김건희", "이비자", "김명순", "이주용", "서재민", "이케르", "제르소", "정치인", "오후성", "무고사"], "sub": ["이동률", "이청용", "이명주", "최승구", "페리어"]}, {"round": 5, "opp": "안양", "start": ["김동헌", "박경섭", "이비자", "김명순", "이주용", "서재민", "이명주", "이동률", "오후성", "박승호", "무고사"], "sub": ["제르소", "이청용", "최승구", "페리어"]}, {"round": 6, "opp": "김천", "start": ["김동헌", "박경섭", "이비자", "김명순", "이주용", "서재민", "이명주", "이동률", "오후성", "박승호", "무고사"], "sub": ["제르소", "이청용", "정치인", "페리어", "이케르"]}, {"round": 7, "opp": "울산", "start": ["김동헌", "박경섭", "이비자", "김명순", "이주용", "서재민", "이명주", "이동률", "오후성", "박승호", "무고사"], "sub": ["여승원", "제르소", "이청용", "페리어"]}, {"round": 8, "opp": "부천", "start": ["이태희", "박경섭", "이비자", "김명순", "여승원", "서재민", "이명주", "제르소", "이청용", "페리어", "무고사"], "sub": ["이주용", "오후성", "정치인", "이동률", "박호민"]}, {"round": 9, "opp": "전북", "start": ["이태희", "박경섭", "이비자", "최승구", "여승원", "서재민", "이명주", "이동률", "정치인", "페리어", "이청용"], "sub": ["이주용", "이케르", "제르소", "무고사", "박호민"]}, {"round": 10, "opp": "제주", "start": ["이태희", "박경섭", "이비자", "김명순", "이주용", "서재민", "이명주", "이동률", "제르소", "이청용", "무고사"], "sub": ["김건희", "최승구", "이케르", "김성민", "페리어"]}, {"round": 11, "opp": "강원", "start": ["이태희", "박경섭", "이비자", "김명순", "이주용", "서재민", "이명주", "이동률", "이청용", "페리어", "무고사"], "sub": ["제르소", "정치인", "이상기", "최승구", "박호민"]}, {"round": 12, "opp": "대전", "start": ["이태희", "박경섭", "이비자", "김명순", "이상기", "서재민", "이명주", "정치인", "제르소", "박승호", "무고사"], "sub": ["페리어", "이동률", "이청용", "최승구", "김동헌"]}, {"round": 13, "opp": "김천", "start": ["김동헌", "김건희", "이비자", "김명순", "이상기", "서재민", "이명주", "이동률", "이청용", "페리어", "제르소"], "sub": ["이주용", "박경섭", "김성민", "정치인", "박승호"]}, {"round": 14, "opp": "포항", "start": ["김동헌", "김건희", "박경섭", "최승구", "이주용", "서재민", "정원진", "김성민", "정치인", "박승호", "박호민"], "sub": ["제르소", "페리어", "이동률", "이명주", "이청용"]}, {"round": 15, "opp": "광주", "start": ["김동헌", "김건희", "이비자", "김명순", "이주용", "서재민", "이명주", "이동률", "제르소", "이청용", "페리어"], "sub": ["최승구", "백민규", "김성민", "박호민", "박승호"]}, {"round": 16, "opp": "서울", "start": ["김동헌", "김건희", "이비자", "김명순", "이주용", "서재민", "이명주", "이동률", "제르소", "이청용", "페리어"], "sub": ["최승구", "무고사", "김성민", "이케르", "박승호"]}, {"round": 17, "opp": "안양", "start": ["김동헌", "김건희", "이비자", "김명순", "이주용", "서재민", "김영환", "이동률", "제르소", "이청용", "페리어"], "sub": ["최승구", "무고사", "이케르", "정치인"]}, {"round": 18, "opp": "전북", "start": ["김동헌", "김건희", "이비자", "김명순", "이주용", "서재민", "이명주", "이동률", "제르소", "이청용", "페리어"], "sub": ["최승구", "무고사", "정치인", "이케르", "박승호"]}, {"round": 19, "opp": "울산", "start": ["김동헌", "김건희", "이비자", "김명순", "이주용", "서재민", "이명주", "김성민", "제르소", "이청용", "페리어"], "sub": ["최승구", "무고사", "이동률", "김영환", "정치인"]}, {"round": 20, "opp": "부천", "start": ["김동헌", "김건희", "이비자", "김명순", "이주용", "서재민", "이명주", "김성민", "제르소", "이청용", "페리어"], "sub": ["최승구", "무고사", "이동률", "정치인", "박경섭"]}, {"round": 21, "opp": "제주", "start": ["김동헌", "이비자", "김건희", "이주용", "김명순", "이명주", "제르소", "서재민", "김성민", "무고사", "이청용"], "sub": ["페리어", "이동률", "김영환", "최승구", "문지환"]}, {"round": 22, "opp": "강원", "start": [], "sub": []}, {"round": 23, "opp": "김천", "start": [], "sub": []}, {"round": 24, "opp": "광주", "start": [], "sub": []}, {"round": 25, "opp": "안양", "start": [], "sub": []}, {"round": 26, "opp": "전북", "start": [], "sub": []}, {"round": 27, "opp": "서울", "start": [], "sub": []}, {"round": 28, "opp": "부천", "start": [], "sub": []}, {"round": 29, "opp": "울산", "start": [], "sub": []}, {"round": 30, "opp": "대전", "start": [], "sub": []}, {"round": 31, "opp": "포항", "start": [], "sub": []}, {"round": 32, "opp": "강원", "start": [], "sub": []}, {"round": 33, "opp": "제주", "start": [], "sub": []}, {"round": 34, "opp": null, "start": [], "sub": []}, {"round": 35, "opp": null, "start": [], "sub": []}, {"round": 36, "opp": null, "start": [], "sub": []}, {"round": 37, "opp": null, "start": [], "sub": []}, {"round": 38, "opp": null, "start": [], "sub": []}], "positions": {"서울": [3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1], "울산": [1, 6, 2, 2, 2, 3, 2, 2, 2, 2, 3, 3, 2, 2, 2, 2, 5, 4, 4, 4, 2], "전북": [10, 9, 9, 7, 3, 2, 3, 3, 4, 3, 2, 2, 3, 3, 3, 4, 2, 3, 3, 2, 3], "강원": [12, 12, 12, 10, 11, 6, 4, 4, 3, 6, 4, 4, 6, 5, 4, 3, 3, 2, 2, 3, 4], "안양": [6, 4, 3, 6, 8, 8, 9, 6, 8, 4, 7, 7, 9, 8, 7, 7, 6, 6, 6, 5, 5], "인천": [11, 11, 10, 11, 10, 5, 8, 10, 7, 5, 8, 8, 5, 6, 6, 6, 7, 7, 7, 6, 6], "제주": [9, 10, 11, 12, 12, 12, 7, 8, 5, 8, 11, 9, 7, 7, 8, 8, 8, 8, 8, 8, 7], "포항": [7, 5, 5, 8, 7, 4, 6, 9, 6, 9, 6, 6, 4, 4, 5, 5, 4, 5, 5, 7, 8], "대전": [5, 8, 8, 3, 4, 7, 11, 7, 10, 7, 5, 5, 8, 9, 10, 10, 10, 9, 9, 9, 9], "김천": [4, 7, 7, 9, 9, 11, 10, 11, 11, 10, 9, 10, 10, 10, 11, 11, 11, 11, 11, 10, 10], "부천": [2, 2, 6, 5, 5, 9, 5, 5, 9, 11, 10, 11, 11, 11, 9, 9, 9, 10, 10, 11, 11], "광주": [8, 3, 4, 4, 6, 10, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12]}, "updated": "2026-08-07", "asof": "2026-08-02 · 21R 종료"};
+const NAVY='#0B1F45', BLUE='#1E5FA8', SKY='#3EA6E8', GOLD='#E2B33C',
+      RED='#D8453B', GREEN='#25B36B', GRAY='#7C879B', DIM='#9AA8C0';
+const RC={'승':'W','무':'D','패':'L'};
+/* 팀 컬러 (구단 상징색 기준) */
+const TC={'인천':'#2E9BFF','서울':'#C8102E','울산':'#1B4FA0','전북':'#0F7B3E',
+          '강원':'#F58220','안양':'#8E44AD','제주':'#E35205','포항':'#8C2F39',
+          '대전':'#5B3FB5','김천':'#D2232A','부천':'#E8574A','광주':'#FFC72C'};
+const hex2rgba=(h,a)=>`rgba(${parseInt(h.slice(1,3),16)},${parseInt(h.slice(3,5),16)},${parseInt(h.slice(5,7),16)},${a})`;
+const fmt=n=>n==null?'—':n.toLocaleString('ko-KR');
+const pct=n=>(n*100).toFixed(1)+'%';
+
+/* ---------- 파생 ---------- */
+const league = D.matches.filter(m=>m.comp==='K리그' && m.res);
+const me = D.table.find(t=>t.team==='인천');
+const topScorer = [...D.players].sort((a,b)=>b.g-a.g)[0];
+document.getElementById('asof').textContent =
+  `${D.asof}  ·  K리그1 ${me.pos}위  ·  ${me.w}승 ${me.d}무 ${me.l}패`;
+document.getElementById('tblAsOf').textContent = D.asof;
+document.getElementById('ftime').textContent = `최종 갱신 ${D.updated}`;
+
+/* ---------- KPI ---------- */
+const gap1 = D.table[4].pts - me.pts;               // 5위와의 격차
+const kl = D.att.kl;
+const kpis=[
+  {l:'리그 순위', v:me.pos+'위', n:`승점 ${me.pts} · ${me.pld}경기`, hl:1},
+  {l:'승점', v:me.pts, n:`경기당 ${(me.pts/me.pld).toFixed(2)}점`},
+  {l:'득실차', v:(me.gd>0?'+':'')+me.gd, n:`${me.gf}득점 ${me.ga}실점`},
+  {l:'5위와 격차', v:(gap1>0?'-':'+')+Math.abs(gap1), n:`5위 ${D.table[4].team} ${D.table[4].pts}점`},
+  {l:'평균 관중', v:Math.round(kl.avg).toLocaleString(), n:`전년 대비 ${kl.yoy>=0?'+':''}${(kl.yoy*100).toFixed(1)}%`},
+  {l:'최다 득점', v:topScorer.g, n:topScorer.name},
+];
+document.getElementById('kpis').innerHTML = kpis.map(k=>
+  `<div class="kpi ${k.hl?'hl':''}"><div class="l">${k.l}</div>
+   <div class="v">${k.v}</div><div class="n">${k.n}</div></div>`).join('');
+
+/* ---------- 순위표 ---------- */
+const zoneOf=p=>p===1?SKY:(p<=3?BLUE:(p===12?RED:'transparent'));
+document.querySelector('#tbl tbody').innerHTML = D.table.map(t=>`
+ <tr class="${t.team==='인천'?'me':''}">
+  <td class="pos"><span class="zone" style="background:${zoneOf(t.pos)}"></span>${t.pos}</td>
+  <td><span class="tdot" style="background:${TC[t.team]||'#8CA0C3'}"></span>${t.team}</td>
+  <td>${t.pld}</td><td>${t.w}</td><td>${t.d}</td><td>${t.l}</td>
+  <td>${t.gf}</td><td>${t.ga}</td>
+  <td class="${t.gd>0?'pos-gd':(t.gd<0?'neg-gd':'')}">${t.gd>0?'+':''}${t.gd}</td>
+  <td class="pts">${t.pts}</td>
+  <td><div class="bar"><i style="width:${t.pts/D.table[0].pts*100}%"></i></div></td>
+ </tr>`).join('');
+
+/* ---------- 폼 ---------- */
+document.getElementById('form').innerHTML = league.map(m=>{
+  const g = m.scorers.length?`<br>⚽ ${m.scorers.join(', ')}`:'';
+  const a = m.assists.length?`<br>🅰 ${m.assists.join(', ')}`:'';
+  return `<div class="pill ${RC[m.res]}">${m.res}
+    <span class="tip"><b>R${m.round} ${m.ha==='홈'?'vs':'@'} ${m.opp}</b> ${m.gf}-${m.ga}
+    <br>${m.date||''}${g}${a}</span></div>`;
+}).join('');
+
+/* ---------- Chart 공통 ---------- */
+Chart.defaults.color = DIM;
+Chart.defaults.font.family = "'Pretendard','Apple SD Gothic Neo',sans-serif";
+Chart.defaults.font.size = 11;
+const gridC='rgba(255,255,255,.06)';
+const axis=(extra={})=>Object.assign({grid:{color:gridC,drawBorder:false},
+  ticks:{maxRotation:0,autoSkipPadding:8}},extra);
+const tt={backgroundColor:'#050B18',borderColor:'#1E3159',borderWidth:1,
+  titleColor:'#fff',bodyColor:'#E8EEF8',padding:9,cornerRadius:8,displayColors:true};
+
+/* 순위 변동 */
+const POS = D.positions||{};
+const nR = (POS['인천']||[]).length;
+const rankLabels = Array.from({length:nR},(_,i)=>'R'+(i+1));
+const others = Object.keys(POS).filter(t=>t!=='인천');
+new Chart(document.getElementById('cRank'),{type:'line',
+ data:{labels:rankLabels,
+  datasets:[
+   {label:'인천',data:POS['인천']||[],borderColor:TC['인천'],backgroundColor:TC['인천'],
+    borderWidth:4,pointRadius:4.5,pointBackgroundColor:TC['인천'],
+    pointBorderColor:'#08101F',pointBorderWidth:1.6,tension:.25,order:0},
+   ...others.map(t=>({label:t,data:POS[t],
+    borderColor:hex2rgba(TC[t]||'#8CA0C3',.48),backgroundColor:TC[t]||'#8CA0C3',
+    borderWidth:1.6,pointRadius:0,pointHoverRadius:4.5,
+    pointBackgroundColor:TC[t],pointBorderColor:'#08101F',tension:.25,order:5}))]},
+ options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},
+  plugins:{legend:{position:'bottom',labels:{boxWidth:9,boxHeight:9,usePointStyle:true,
+    pointStyle:'circle',padding:9,font:{size:10.5},color:'#C6D2E6'}},
+   tooltip:Object.assign({},tt,{itemSort:(a,b)=>a.raw-b.raw,
+     callbacks:{label:c=>` ${c.dataset.label}  ${c.raw}위`}})},
+  scales:{x:axis({grid:{display:false}}),
+   y:{reverse:true,min:1,max:12,grid:{color:gridC},
+      ticks:{stepSize:1,callback:v=>v+'위'}}}}});
+{
+  const p = POS['인천']||[];
+  const best = Math.min(...p), worst = Math.max(...p);
+  const now = p[p.length-1], prev = p.length>1?p[p.length-2]:now;
+  const mv = prev-now;
+  document.getElementById('rankNote').innerHTML =
+   `현재 <b style="color:${TC['인천']}">${now}위</b> · 직전 라운드 대비
+    <b style="color:${mv>0?GREEN:mv<0?RED:DIM}">${mv>0?'▲'+mv:mv<0?'▼'+(-mv):'—'}</b>
+    &nbsp;|&nbsp; 시즌 최고 ${best}위 · 최저 ${worst}위`;
+}
+
+/* 득점/실점 */
+new Chart(document.getElementById('cGoals'),{type:'bar',
+ data:{labels:league.map(m=>'R'+m.round),
+  datasets:[{label:'득점',data:league.map(m=>m.gf),backgroundColor:SKY,borderRadius:3},
+            {label:'실점',data:league.map(m=>-m.ga),backgroundColor:RED,borderRadius:3}]},
+ options:{responsive:true,maintainAspectRatio:false,
+  plugins:{legend:{labels:{boxWidth:10,boxHeight:10,usePointStyle:true,pointStyle:'rectRounded'}},
+   tooltip:Object.assign({},tt,{callbacks:{label:c=>c.dataset.label+': '+Math.abs(c.raw)}})},
+  scales:{x:Object.assign(axis(),{stacked:true}),
+          y:Object.assign(axis(),{stacked:true,ticks:{callback:v=>Math.abs(v)}})}}});
+
+/* 홈/원정 */
+const H=D.split[0],A=D.split[1],T=D.split[2];
+const rows=[['경기','pld'],['승','w'],['무','d'],['패','l'],['승점','pts'],
+            ['득점','gf'],['실점','ga'],['경기당 승점','ppg']];
+document.getElementById('split').innerHTML = rows.map(([lbl,k])=>{
+  const h=k==='ppg'?H[k].toFixed(2):H[k], a=k==='ppg'?A[k].toFixed(2):A[k];
+  const mx=Math.max(H[k],A[k])||1;
+  return `<div class="split">
+   <div class="h"><div class="bar"><i style="width:${H[k]/mx*100}%"></i></div><span>${h}</span></div>
+   <div class="lbl">${lbl}</div>
+   <div class="a"><span>${a}</span><div class="bar g"><i style="width:${A[k]/mx*100}%"></i></div></div>
+  </div>`;
+}).join('') + `<div class="note">왼쪽 <b style="color:var(--sky)">홈 ${H.pld}경기</b> ·
+  오른쪽 <b style="color:var(--green)">원정 ${A.pld}경기</b> · 총 ${T.pld}경기 승점 ${T.pts}</div>`;
+
+/* 관중 (K리그만) */
+const attM = D.matches.filter(m=>m.att && m.comp==='K리그');
+new Chart(document.getElementById('cAtt'),{type:'line',
+ data:{labels:attM.map(m=>'R'+m.round),
+  datasets:[{label:'관중',data:attM.map(m=>m.att),borderColor:GOLD,borderWidth:2.5,
+   pointRadius:4,pointBackgroundColor:NAVY,pointBorderColor:GOLD,pointBorderWidth:1.8,
+   tension:.2,fill:true,
+   backgroundColor:(c)=>{const g=c.chart.ctx.createLinearGradient(0,0,0,250);
+     g.addColorStop(0,'rgba(226,179,60,.28)');g.addColorStop(1,'rgba(226,179,60,0)');return g;}}]},
+ options:{responsive:true,maintainAspectRatio:false,
+  plugins:{legend:{display:false},tooltip:Object.assign({},tt,{callbacks:{
+    title:c=>{const m=attM[c[0].dataIndex];return `${m.round}R vs ${m.opp}`},
+    label:c=>fmt(c.raw)+'명'}})},
+  scales:{x:axis(),y:axis({ticks:{callback:v=>(v/1000)+'k'}})}}});
+document.getElementById('attNote').innerHTML =
+ `홈 ${kl.n}경기 · 총 ${fmt(kl.tot)}명 · 평균 <b>${fmt(Math.round(kl.avg))}명</b>
+  (2025년 ${fmt(Math.round(kl.py_avg))}명 대비 <b style="color:${kl.yoy>=0?GREEN:RED}">
+  ${kl.yoy>=0?'+':''}${(kl.yoy*100).toFixed(1)}%</b>)`;
+
+/* 선수 공격포인트 */
+const gaP = D.players.filter(p=>p.ga>0).sort((a,b)=>b.ga-a.ga);
+new Chart(document.getElementById('cGA'),{type:'bar',
+ data:{labels:gaP.map(p=>p.name),
+  datasets:[{label:'득점',data:gaP.map(p=>p.g),backgroundColor:BLUE,borderRadius:3},
+            {label:'도움',data:gaP.map(p=>p.a),backgroundColor:SKY,borderRadius:3}]},
+ options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,
+  plugins:{legend:{labels:{boxWidth:10,boxHeight:10,usePointStyle:true,pointStyle:'rectRounded'}},
+   tooltip:tt},
+  scales:{x:Object.assign(axis(),{stacked:true,ticks:{stepSize:1}}),
+          y:Object.assign(axis(),{stacked:true,grid:{display:false}})}}});
+
+/* 선수 테이블 */
+let sortK='ga', sortD=-1;
+const maxApp = Math.max(...D.players.map(p=>p.app))||1;
+function drawPl(){
+  const rows=[...D.players].sort((a,b)=>{
+    const x=a[sortK],y=b[sortK];
+    if(typeof x==='string') return sortD*x.localeCompare(y,'ko');
+    return sortD*(x-y);
+  });
+  document.querySelector('#pl tbody').innerHTML = rows.map(p=>`
+   <tr><td>${p.name}</td><td>${p.app}</td><td>${p.start}</td><td>${p.sub}</td>
+   <td${p.g?' style="color:'+SKY+';font-weight:700"':''}>${p.g}</td>
+   <td${p.a?' style="color:'+GREEN+';font-weight:700"':''}>${p.a}</td>
+   <td style="font-weight:750">${p.ga}</td>
+   <td><div class="bar"><i style="width:${p.app/maxApp*100}%"></i></div></td></tr>`).join('');
+}
+document.querySelectorAll('#pl th[data-k]').forEach(th=>{
+  th.style.cursor='pointer';
+  th.onclick=()=>{const k=th.dataset.k; sortD = (k===sortK)? -sortD : (k==='name'?1:-1);
+    sortK=k; drawPl();};
+});
+drawPl();
+
+/* 주심 */
+document.querySelector('#ref tbody').innerHTML =
+ [...D.refs].sort((a,b)=>b.pld-a.pld||b.pts-a.pts).map(r=>`
+  <tr><td>${r.name}</td><td>${r.pld}</td><td>${r.w}</td><td>${r.d}</td><td>${r.l}</td>
+  <td class="pts">${r.pts}</td><td>${(r.pts/r.pld).toFixed(2)}</td></tr>`).join('');
+
+/* 경기 결과 (K리그만) */
+const played = league;
+document.getElementById('mlist').innerHTML = played.map(m=>{
+  const c = m.res==='승'?'linear-gradient(145deg,#4FE39B,#2BC57E)':
+            m.res==='무'?'linear-gradient(145deg,#CBD3E0,#A6B0C2)':
+                         'linear-gradient(145deg,#FF9188,#F2685C)';
+  return `<div class="mrow">
+   <div class="r">R${m.round}</div>
+   <div class="d">${m.date||''}</div>
+   <div>${m.opp}<span class="ha ${m.ha==='홈'?'H':'A'}">${m.ha}</span></div>
+   <div class="sc">${m.gf} : ${m.ga}</div>
+   <div class="goals">${m.scorers.join(', ')}</div>
+   <div class="rr" style="background:${c}">${m.res}</div></div>`;
+}).join('');
+</script>
+</body>
+</html>
