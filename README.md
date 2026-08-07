@@ -64,7 +64,7 @@ git push -u origin main
 
 1. Claude에게 **"인천 OO라운드 결과 업데이트해줘"** 라고 요청
    → 워크북·대시보드·`index.html`이 모두 갱신됩니다
-2. **`publish.bat` 더블클릭**
+2. **`publish.bat` 더블클릭 (index.html 은 자동 생성됨)**
    → 커밋 + 푸시. 1~2분 뒤 웹에 반영
 
 ---

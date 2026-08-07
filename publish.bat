@@ -9,30 +9,28 @@ echo.
 
 if not exist ".git" (
   echo [!] Not a git repository. See README.md
-  echo.
   pause
   exit /b 1
 )
 
-echo [1/4] Copy dashboard to index.html
-copy /Y "인천 2026 대시보드.html" "index.html" >nul
-if errorlevel 1 (
-  echo [!] Dashboard file not found.
+if not exist "index.html" (
+  echo [!] index.html not found.
+  echo     Ask Claude to regenerate the dashboard first.
   pause
   exit /b 1
 )
 
-echo [2/4] Commit local changes
+echo [1/3] Commit local changes
 git add -A
 git diff --cached --quiet
 if errorlevel 1 (
-  git commit -m "update dashboard" >nul
-  echo     committed.
+  git commit -m "update dashboard"
 ) else (
   echo     nothing new to commit.
 )
+echo.
 
-echo [3/4] Sync with GitHub
+echo [2/3] Sync with GitHub
 git fetch origin
 git merge -X ours --no-edit origin/main
 if errorlevel 1 (
@@ -42,12 +40,13 @@ if errorlevel 1 (
   pause
   exit /b 1
 )
+echo.
 
-echo [4/4] Push
+echo [3/3] Push
 git push
 if errorlevel 1 (
   echo.
-  echo [!] Push failed. Check internet / GitHub login.
+  echo [!] Push failed. Check internet or GitHub login.
   pause
   exit /b 1
 )
