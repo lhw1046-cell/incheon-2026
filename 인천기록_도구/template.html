@@ -454,6 +454,36 @@ document.getElementById('form').innerHTML = league.map(m=>{
 }).join('');
 
 /* ---------- Chart 공통 ---------- */
+const IS_TOUCH = window.matchMedia('(hover:none)').matches;
+const NARROW = window.innerWidth < 620;
+const CHARTS = [];
+
+/* 터치 기기: 손을 떼면 툴팁을 지워 그래프 전체가 다시 보이게 한다 */
+function mkChart(id, cfg){
+  const el = document.getElementById(id);
+  if(!el) return null;
+  const ch = new Chart(el, cfg);
+  CHARTS.push(ch);
+  if(IS_TOUCH){
+    let t;
+    const clear = () => {
+      if(!ch.tooltip) return;
+      ch.setActiveElements([]);
+      ch.tooltip.setActiveElements([], {x:0, y:0});
+      ch.update('none');
+    };
+    const schedule = () => { clearTimeout(t); t = setTimeout(clear, 450); };
+    el.addEventListener('touchend', schedule, {passive:true});
+    el.addEventListener('touchcancel', clear, {passive:true});
+    el.addEventListener('touchstart', () => clearTimeout(t), {passive:true});
+    /* 차트 밖을 누르면 즉시 사라짐 */
+    document.addEventListener('touchstart', e => {
+      if(e.target !== el){ clearTimeout(t); clear(); }
+    }, {passive:true});
+  }
+  return ch;
+}
+
 Chart.defaults.color = DIM;
 Chart.defaults.font.family = "'Pretendard','Apple SD Gothic Neo',sans-serif";
 Chart.defaults.font.size = 11;
@@ -468,7 +498,7 @@ const POS = D.positions||{};
 const nR = (POS['인천']||[]).length;
 const rankLabels = Array.from({length:nR},(_,i)=>'R'+(i+1));
 const others = Object.keys(POS).filter(t=>t!=='인천');
-new Chart(document.getElementById('cRank'),{type:'line',
+mkChart('cRank',{type:'line',
  data:{labels:rankLabels,
   datasets:[
    {label:'인천',data:POS['인천']||[],borderColor:TC['인천'],backgroundColor:TC['인천'],
@@ -482,6 +512,10 @@ new Chart(document.getElementById('cRank'),{type:'line',
   plugins:{legend:{position:'bottom',labels:{boxWidth:9,boxHeight:9,usePointStyle:true,
     pointStyle:'circle',padding:9,font:{size:10.5},color:'#C6D2E6'}},
    tooltip:Object.assign({},tt,{itemSort:(a,b)=>a.raw-b.raw,
+     position:'nearest',
+     bodyFont:{size:NARROW?10.5:12},titleFont:{size:NARROW?11:13},
+     boxWidth:NARROW?7:9,boxHeight:NARROW?7:9,boxPadding:NARROW?2:4,
+     padding:NARROW?6:9,caretPadding:NARROW?10:4,
      callbacks:{label:c=>` ${c.dataset.label}  ${c.raw}위`}})},
   scales:{x:axis({grid:{display:false}}),
    y:{reverse:true,min:1,max:12,grid:{color:gridC},
@@ -498,7 +532,7 @@ new Chart(document.getElementById('cRank'),{type:'line',
 }
 
 /* 득점/실점 */
-new Chart(document.getElementById('cGoals'),{type:'bar',
+mkChart('cGoals',{type:'bar',
  data:{labels:league.map(m=>'R'+m.round),
   datasets:[{label:'득점',data:league.map(m=>m.gf),backgroundColor:SKY,borderRadius:3},
             {label:'실점',data:league.map(m=>-m.ga),backgroundColor:RED,borderRadius:3}]},
@@ -525,7 +559,7 @@ document.getElementById('split').innerHTML = rows.map(([lbl,k])=>{
 
 /* 관중 (K리그만) */
 const attM = D.matches.filter(m=>m.att && m.comp==='K리그');
-new Chart(document.getElementById('cAtt'),{type:'line',
+mkChart('cAtt',{type:'line',
  data:{labels:attM.map(m=>'R'+m.round),
   datasets:[{label:'관중',data:attM.map(m=>m.att),borderColor:GOLD,borderWidth:2.5,
    pointRadius:4,pointBackgroundColor:NAVY,pointBorderColor:GOLD,pointBorderWidth:1.8,
@@ -544,7 +578,7 @@ document.getElementById('attNote').innerHTML =
 
 /* 선수 공격포인트 */
 const gaP = D.players.filter(p=>p.ga>0).sort((a,b)=>b.ga-a.ga);
-new Chart(document.getElementById('cGA'),{type:'bar',
+mkChart('cGA',{type:'bar',
  data:{labels:gaP.map(p=>p.name),
   datasets:[{label:'득점',data:gaP.map(p=>p.g),backgroundColor:BLUE,borderRadius:3},
             {label:'도움',data:gaP.map(p=>p.a),backgroundColor:SKY,borderRadius:3}]},
