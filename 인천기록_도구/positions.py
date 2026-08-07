@@ -60,6 +60,18 @@ def compute_positions(rounds=None):
     return history, final
 
 
+def team_matches(rounds=None):
+    """{팀: [{round, opp, ha, gf, ga, res}, ...]}  — 라운드 순 정렬"""
+    rounds = rounds if rounds is not None else load()
+    out = {t: [] for t in TEAMS}
+    for rd in sorted(rounds, key=int):
+        for h, hg, a, ag in rounds[rd]:
+            for t, o, gf, ga, ha in ((h, a, hg, ag, "홈"), (a, h, ag, hg, "원정")):
+                out[t].append({"round": int(rd), "opp": o, "ha": ha, "gf": gf, "ga": ga,
+                               "res": "승" if gf > ga else ("무" if gf == ga else "패")})
+    return out
+
+
 if __name__ == "__main__":
     hist, fin = compute_positions()
     for row in fin:

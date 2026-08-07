@@ -107,6 +107,55 @@ tr.me:hover{background:linear-gradient(90deg,rgba(226,179,60,.28),rgba(226,179,6
 .split .h{justify-content:flex-end}
 .split .h .bar{transform:scaleX(-1)}
 
+/* PREVIEW */
+.pv{background:linear-gradient(150deg,rgba(46,155,255,.14),rgba(15,28,54,.9) 55%),var(--card);
+  border:1px solid #27508C;border-radius:16px;padding:18px;position:relative;overflow:hidden}
+.pv:before{content:"";position:absolute;inset:0;
+  background:radial-gradient(560px 200px at 12% -40%,rgba(46,155,255,.22),transparent 70%);
+  pointer-events:none}
+.pv>*{position:relative}
+.pv-top{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+.badge{font-size:11px;font-weight:800;padding:3px 10px;border-radius:20px;
+  background:var(--sky);color:#08101F;letter-spacing:.3px}
+.badge.ghost{background:rgba(255,255,255,.09);color:var(--txt);font-weight:650}
+.pv-vs{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:12px;
+  padding:6px 0 16px}
+.pv-team{display:flex;flex-direction:column;align-items:center;gap:7px;text-align:center}
+.pv-badge{width:52px;height:52px;border-radius:15px;display:grid;place-items:center;
+  font-size:17px;font-weight:900;color:#fff;letter-spacing:-.5px}
+.pv-name{font-size:17px;font-weight:800;letter-spacing:-.3px}
+.pv-sub{font-size:11px;color:var(--dim)}
+.pv-mid{font-size:15px;font-weight:800;color:var(--dim);letter-spacing:1px}
+.pv-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:11px;
+  margin-top:4px}
+.pv-box{background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.07);
+  border-radius:12px;padding:12px 13px}
+.pv-box h4{font-size:10.5px;color:var(--dim);letter-spacing:.8px;font-weight:700;
+  text-transform:uppercase;margin-bottom:8px}
+.pv-h2h{font-size:12.5px;line-height:1.85}
+.pv-h2h .s{display:inline-block;min-width:34px;font-weight:800;
+  font-variant-numeric:tabular-nums}
+.pv-player{display:flex;align-items:center;gap:10px}
+.pv-player .av{width:34px;height:34px;border-radius:10px;flex:none;display:grid;
+  place-items:center;font-size:13px;font-weight:800;color:#fff}
+.pv-player .n{font-size:14px;font-weight:750;line-height:1.25}
+.pv-player .d{font-size:11px;color:var(--dim)}
+.miniform{display:flex;gap:3px;margin-top:4px}
+.miniform i{width:18px;height:18px;border-radius:5px;display:grid;place-items:center;
+  font-size:9.5px;font-weight:900;color:#0A0F1A;font-style:normal}
+
+/* SCHEDULE */
+.srow{display:grid;grid-template-columns:36px 74px 30px 1fr 46px;gap:9px;align-items:center;
+  padding:8px 6px;border-bottom:1px solid rgba(30,49,89,.5);font-size:12.5px}
+.srow:last-child{border:0}
+.srow:hover{background:rgba(62,166,232,.06)}
+.srow.next{background:linear-gradient(90deg,rgba(46,155,255,.16),transparent);
+  border-radius:8px}
+.srow .r{color:var(--dim);font-size:11px;font-weight:650}
+.srow .d{color:var(--dim);font-size:11px}
+.srow .dw{color:var(--gray);font-size:11px;text-align:center}
+.srow .tbd{color:var(--gray);font-style:italic}
+
 .chartbox{position:relative;height:250px}
 .chartbox.tall{height:330px}
 .legend{display:flex;gap:14px;font-size:11px;color:var(--dim);margin-top:9px;flex-wrap:wrap}
@@ -153,6 +202,26 @@ tr.me:hover{background:linear-gradient(90deg,rgba(226,179,60,.28),rgba(226,179,6
 <div class="wrap">
 
 <section>
+  <h2>다음 경기</h2>
+  <div id="preview"></div>
+</section>
+
+<section>
+  <h2>경기 일정 <span class="tag">남은 일정</span></h2>
+  <div class="card" id="sched"></div>
+</section>
+
+<section>
+  <h2>경기 결과 <span class="tag">K리그1 정규리그</span></h2>
+  <div class="card" id="mlist"></div>
+</section>
+
+<section>
+  <h2>시즌 폼 가이드 <span class="tag">라운드 순 · 마우스를 올리면 상세</span></h2>
+  <div class="card"><div class="form" id="form"></div></div>
+</section>
+
+<section>
   <h2>K리그1 리그순위 <span class="tag" id="tblAsOf"></span></h2>
   <div class="card scroll">
     <table id="tbl"><thead><tr>
@@ -165,11 +234,6 @@ tr.me:hover{background:linear-gradient(90deg,rgba(226,179,60,.28),rgba(226,179,6
       <span class="zone" style="background:var(--red)"></span>강등 PO
     </div>
   </div>
-</section>
-
-<section>
-  <h2>시즌 폼 가이드 <span class="tag">라운드 순 · 마우스를 올리면 상세</span></h2>
-  <div class="card"><div class="form" id="form"></div></div>
 </section>
 
 <section>
@@ -219,11 +283,6 @@ tr.me:hover{background:linear-gradient(90deg,rgba(226,179,60,.28),rgba(226,179,6
       <th data-k="ga">공격P</th><th style="width:120px">출전 분포</th>
     </tr></thead><tbody></tbody></table>
   </div>
-</section>
-
-<section>
-  <h2>경기 결과 <span class="tag">K리그1 정규리그</span></h2>
-  <div class="card" id="mlist"></div>
 </section>
 
 <div class="foot">
@@ -281,6 +340,109 @@ document.querySelector('#tbl tbody').innerHTML = D.table.map(t=>`
   <td class="pts">${t.pts}</td>
   <td><div class="bar"><i style="width:${t.pts/D.table[0].pts*100}%"></i></div></td>
  </tr>`).join('');
+
+/* ---------- 다음 경기 프리뷰 + 일정 ---------- */
+const TODAY = D.today || new Date().toISOString().slice(0,10);
+const upcoming = D.matches
+  .filter(m=>m.comp==='K리그' && !m.res)
+  .sort((a,b)=>{
+    if(a.iso && b.iso) return a.iso.localeCompare(b.iso);
+    if(a.iso) return -1; if(b.iso) return 1;
+    return (a.round||99)-(b.round||99);
+  });
+const next = upcoming.find(m=>!m.iso || m.iso>=TODAY) || upcoming[0];
+const dday = iso => {
+  if(!iso) return '';
+  const d = Math.round((new Date(iso)-new Date(TODAY))/864e5);
+  return d===0?'오늘':d>0?`D-${d}`:'';
+};
+const badgeOf = t => `<div class="pv-badge" style="background:linear-gradient(145deg,${TC[t]||'#8CA0C3'},${hex2rgba(TC[t]||'#8CA0C3',.55)})">${t}</div>`;
+const miniForm = arr => `<div class="miniform">${arr.map(r=>{
+  const bg = r==='승'?'#4FE39B':r==='무'?'#CBD3E0':'#FF9188';
+  return `<i style="background:${bg}">${r}</i>`;}).join('')}</div>`;
+
+if(next){
+  const opp = next.opp, home = next.ha==='홈';
+  const oppRow = D.table.find(t=>t.team===opp) || {};
+  const h2h = league.filter(m=>m.opp===opp);
+  const hw=h2h.filter(m=>m.res==='승').length, hd=h2h.filter(m=>m.res==='무').length,
+        hl=h2h.filter(m=>m.res==='패').length;
+  const oppForm = ((D.teamMatches||{})[opp]||[]).slice(-5).map(m=>m.res);
+  const myForm = league.slice(-5).map(m=>m.res);
+  const kpMe = (D.keyPlayers||{})['인천'], kpOpp = (D.keyPlayers||{})[opp];
+  const playerCard = (team,kp,fallback) => kp
+    ? `<div class="pv-player">
+         <div class="av" style="background:${TC[team]}">${kp.name.slice(0,1)}</div>
+         <div><div class="n">${kp.name}</div><div class="d">${kp.note||''}</div></div>
+       </div>`
+    : `<div class="pv-player"><div class="av" style="background:${TC[team]}">?</div>
+         <div><div class="n">—</div><div class="d">${fallback}</div></div></div>`;
+
+  document.getElementById('preview').innerHTML = `
+  <div class="pv">
+    <div class="pv-top">
+      <span class="badge">${next.round}R</span>
+      <span class="badge ghost">${next.date||'일정 미정'}${next.dow?' ('+next.dow+')':''}</span>
+      <span class="badge ghost">${home?'홈':'원정'}</span>
+      ${dday(next.iso)?`<span class="badge ghost" style="color:${TC['인천']}">${dday(next.iso)}</span>`:''}
+    </div>
+    <div class="pv-vs">
+      <div class="pv-team">
+        ${badgeOf(home?'인천':opp)}
+        <div><div class="pv-name">${home?'인천':opp}</div>
+        <div class="pv-sub">${home?me.pos+'위 · 승점 '+me.pts:(oppRow.pos||'-')+'위 · 승점 '+(oppRow.pts??'-')}</div></div>
+      </div>
+      <div class="pv-mid">VS</div>
+      <div class="pv-team">
+        ${badgeOf(home?opp:'인천')}
+        <div><div class="pv-name">${home?opp:'인천'}</div>
+        <div class="pv-sub">${home?(oppRow.pos||'-')+'위 · 승점 '+(oppRow.pts??'-'):me.pos+'위 · 승점 '+me.pts}</div></div>
+      </div>
+    </div>
+    <div class="pv-grid">
+      <div class="pv-box">
+        <h4>올시즌 ${opp}전</h4>
+        <div class="pv-h2h">
+          <b style="font-size:14px">${hw}승 ${hd}무 ${hl}패</b>
+          <span style="color:var(--dim)">· ${h2h.reduce((s,m)=>s+m.gf,0)}득 ${h2h.reduce((s,m)=>s+m.ga,0)}실</span><br>
+          ${h2h.length? h2h.map(m=>`<span style="color:var(--dim)">R${m.round} ${m.ha==='홈'?'H':'A'}</span>
+            <span class="s" style="color:${m.res==='승'?GREEN:m.res==='패'?RED:DIM}">${m.gf}-${m.ga}</span>
+            <span style="color:var(--dim)">${m.res}</span>`).join('<br>')
+            : '<span style="color:var(--dim)">첫 맞대결</span>'}
+        </div>
+      </div>
+      <div class="pv-box">
+        <h4>최근 5경기</h4>
+        <div style="font-size:12px;margin-bottom:3px">인천</div>${miniForm(myForm)}
+        <div style="font-size:12px;margin:9px 0 3px">${opp}</div>${miniForm(oppForm)}
+      </div>
+      <div class="pv-box">
+        <h4>인천 주요 선수</h4>
+        ${playerCard('인천',kpMe,'')}
+      </div>
+      <div class="pv-box">
+        <h4>${opp} 주요 선수</h4>
+        ${playerCard(opp,kpOpp,`${oppRow.gf??'-'}득점 ${oppRow.ga??'-'}실점`)}
+      </div>
+    </div>
+  </div>`;
+} else {
+  document.getElementById('preview').innerHTML =
+    `<div class="card"><span style="color:var(--dim)">남은 일정이 없습니다.</span></div>`;
+}
+
+document.getElementById('sched').innerHTML = upcoming.length
+ ? upcoming.map(m=>`
+   <div class="srow ${m===next?'next':''}">
+     <div class="r">R${m.round}</div>
+     <div class="d">${m.date||'<span class="tbd">미정</span>'}</div>
+     <div class="dw">${m.dow||''}</div>
+     <div>${m.opp?`<span class="tdot" style="background:${TC[m.opp]||'#8CA0C3'}"></span>${m.opp}`
+             :'<span class="tbd">스플릿 라운드 · 상대 미정</span>'}
+       ${m.ha?`<span class="ha ${m.ha==='홈'?'H':'A'}">${m.ha}</span>`:''}</div>
+     <div class="d" style="text-align:right">${dday(m.iso)}</div>
+   </div>`).join('')
+ : '<span style="color:var(--dim)">남은 일정이 없습니다.</span>';
 
 /* ---------- 폼 ---------- */
 document.getElementById('form').innerHTML = league.map(m=>{

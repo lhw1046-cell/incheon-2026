@@ -5,7 +5,7 @@
 payload.json 스키마는 SKILL.md 참고. 모든 키는 선택(있는 것만 반영).
 실행 순서: 워크북 갱신 → LibreOffice 재계산 → data.json 추출 → 대시보드 재생성
 """
-import openpyxl, json, sys, os, shutil, subprocess, warnings, datetime
+import openpyxl, json, sys, os, re, shutil, subprocess, warnings, datetime
 warnings.filterwarnings("ignore")
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import charts as CH
@@ -111,12 +111,24 @@ w2 = openpyxl.load_workbook(f"{TMP}/o/t.xlsx", data_only=True)
 s1, s2 = w2["2026 토탈"], w2["출전기록 (26)"]
 cellv = lambda s, r, c: s.cell(r, c).value
 
+SEASON = 2026
+
+
+def to_iso(txt):
+    """'8월 16일' → '2026-08-16'  (파싱 실패 시 None)"""
+    if not isinstance(txt, str):
+        return None
+    m = re.match(r"\s*(\d{1,2})\s*월\s*(\d{1,2})\s*일", txt)
+    return f"{SEASON}-{int(m.group(1)):02d}-{int(m.group(2)):02d}" if m else None
+
+
 matches = [{"comp": cellv(s1, r, 1), "date": cellv(s1, r, 2), "dow": cellv(s1, r, 3),
             "round": cellv(s1, r, 4), "opp": cellv(s1, r, 5), "ha": cellv(s1, r, 6),
             "gf": cellv(s1, r, 7), "ga": cellv(s1, r, 8), "res": cellv(s1, r, 9),
             "scorers": [cellv(s1, r, c) for c in range(13, 17) if cellv(s1, r, c)],
             "assists": [cellv(s1, r, c) for c in range(17, 21) if cellv(s1, r, c)],
-            "att": cellv(s1, r, 21), "ref": cellv(s1, r, 22)}
+            "att": cellv(s1, r, 21), "ref": cellv(s1, r, 22),
+           "iso": to_iso(cellv(s1, r, 2))}
            for r in range(3, 42) if cellv(s1, r, 1)]
 players = [{"name": cellv(s1, r, 24), "app": cellv(s1, r, 25) or 0, "start": cellv(s1, r, 26) or 0,
             "sub": cellv(s1, r, 27) or 0, "g": cellv(s1, r, 28) or 0, "a": cellv(s1, r, 29) or 0,
@@ -147,8 +159,14 @@ lineups = [{"round": cellv(s2, r, 1), "opp": cellv(s2, r, 2),
 played = [m for m in matches if m["res"] and m["comp"] == "K리그"]
 last = played[-1] if played else None
 asof = pl.get("standings_asof") or (f"{last['date']} · {last['round']}R 종료" if last else "")
+kp_path = os.path.join(BASE, "key_players.json")
+key_players = json.load(open(kp_path, encoding="utf-8")) if os.path.exists(kp_path) else {}
+key_players = {k: v for k, v in key_players.items() if not k.startswith("_")}
+
 data = {"matches": matches, "players": players, "split": split, "table": table, "refs": refs,
         "att": att, "runner": runner, "lineups": lineups, "positions": history,
+        "teamMatches": POS.team_matches(lr), "keyPlayers": key_players,
+        "today": datetime.date.today().isoformat(),
         "updated": datetime.date.today().isoformat(), "asof": asof}
 json.dump(data, open(os.path.join(BASE, "data.json"), "w", encoding="utf-8"),
           ensure_ascii=False, indent=1)
