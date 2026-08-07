@@ -1,0 +1,51 @@
+<!--
+==========================================================
+  방문자 카운터 — hits.sh  (복사해서 붙여넣기용)
+==========================================================
+  · 이미지 한 장이라 자바스크립트·CORS·가입 전부 불필요
+  · 정적 사이트 어디서든 동작 (GitHub Pages, Netlify, 티스토리 등)
+  · ★ URL 안의 주소를 본인 사이트 주소로 바꾸면 끝
+       (프로토콜 https:// 는 빼고 씀)
+==========================================================
+-->
+
+<!-- ── 기본형 : 총 방문자만 ───────────────────────────── -->
+<a href="https://hits.sh/lhw1046-cell.github.io/baby-leap/" target="_blank" rel="noopener">
+  <img alt="방문자"
+       src="https://hits.sh/lhw1046-cell.github.io/baby-leap.svg?style=flat-square&label=%EB%B0%A9%EB%AC%B8%EC%9E%90&color=2e9bff&labelColor=16294a">
+</a>
+
+
+<!-- ── 오늘 / 전체 둘 다 보고 싶으면 : view=today-total ── -->
+<a href="https://hits.sh/lhw1046-cell.github.io/baby-leap/" target="_blank" rel="noopener">
+  <img alt="방문자"
+       src="https://hits.sh/lhw1046-cell.github.io/baby-leap.svg?view=today-total&style=flat-square&label=%EC%98%A4%EB%8A%98%2F%EC%A0%84%EC%B2%B4&color=2e9bff&labelColor=16294a">
+</a>
+
+
+<!-- ── 크기·정렬 다듬기 (선택) ────────────────────────── -->
+<style>
+.visits{display:inline-block;line-height:0;opacity:.9;transition:opacity .15s}
+.visits:hover{opacity:1}
+.visits img{height:20px;display:block}   /* 숫자 키우려면 24~28px */
+</style>
+
+
+<!--
+==========================================================
+  URL 파라미터 정리
+==========================================================
+  view       total (기본) | today-total
+  style      flat-square | flat | plastic | for-the-badge
+  label      왼쪽 글자. 한글은 URL 인코딩 필요
+               방문자 → %EB%B0%A9%EB%AC%B8%EC%9E%90
+               오늘/전체 → %EC%98%A4%EB%8A%98%2F%EC%A0%84%EC%B2%B4
+               (인코딩은 구글에 "url 인코더" 검색해서 변환)
+  color      숫자 쪽 배경색 (# 없이 6자리 hex)
+  labelColor 라벨 쪽 배경색
+  extraCount 시작 숫자 보정. 예전 카운트를 이어가고 싶을 때
+
+  밝은 배경 사이트라면:  color=2e9bff&labelColor=555555
+  상세 통계(주간·월간·연간 히트맵)는 hits.sh 링크를 눌러서 확인
+==========================================================
+-->

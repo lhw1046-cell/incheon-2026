@@ -186,14 +186,11 @@ tr.me:hover{background:linear-gradient(90deg,rgba(226,179,60,.28),rgba(226,179,6
 .ha.A{background:rgba(62,166,232,.16);color:var(--sky)}
 
 .note{font-size:11px;color:var(--dim);margin-top:10px;line-height:1.6}
-/* VISITS */
-.visits{display:inline-flex;align-items:center;gap:9px;margin-top:9px;
-  padding:4px 11px;border:1px solid var(--line);border-radius:20px;
-  background:rgba(255,255,255,.035);font-size:11px;color:var(--dim);
-  line-height:1.4;white-space:nowrap}
-.visits .vi i{font-style:normal;margin-right:4px;letter-spacing:.2px}
-.visits .vi b{font-weight:750;color:var(--sky);font-variant-numeric:tabular-nums}
-.visits .vsep{width:1px;height:10px;background:var(--line)}
+/* VISITS (hits.sh 배지) */
+.visits{display:inline-block;margin-top:9px;line-height:0;opacity:.9;
+  transition:opacity .15s}
+.visits:hover{opacity:1}
+.visits img{height:20px;display:block}
 
 .foot{margin-top:40px;padding-top:16px;border-top:1px solid var(--line);
   color:var(--gray);font-size:11px;line-height:1.7}
@@ -306,11 +303,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <div class="foot">
   데이터: <b>인천 2026 기록.xlsx</b> · 리그순위 출처 soccer365 / K리그 공식<br>
   <span id="ftime"></span><br>
-  <span class="visits" id="visits" hidden>
-    <span class="vi"><i>오늘</i><b id="vToday">0</b></span>
-    <span class="vsep"></span>
-    <span class="vi"><i>전체</i><b id="vTotal">0</b></span>
-  </span>
+  <a class="visits" href="https://hits.sh/lhw1046-cell.github.io/incheon-2026/"
+     target="_blank" rel="noopener" title="방문자 수 상세 보기">
+    <img alt="방문자"
+         src="https://hits.sh/lhw1046-cell.github.io/incheon-2026.svg?style=flat-square&label=%EB%B0%A9%EB%AC%B8%EC%9E%90&color=2e9bff&labelColor=16294a">
+  </a>
 </div>
 </div>
 
@@ -642,35 +639,6 @@ document.querySelector('#ref tbody').innerHTML =
    <td style="color:${col};font-weight:750">${(wr*100).toFixed(1)}%</td>
    <td><div class="bar"><i style="width:${wr*100}%"></i></div></td></tr>`;
  }).join('');
-
-/* ---------- 방문자 카운터 ---------- */
-(function(){
-  const NS = 'lhw-incheon-2026';
-  const API = k => `https://api.counterapi.dev/v1/${NS}/${k}`;
-  /* 한국 시간 기준 날짜 (YYYY-MM-DD) */
-  const kst = new Date().toLocaleDateString('sv-SE',{timeZone:'Asia/Seoul'});
-  const dayKey = 'day-' + kst;
-  /* 실제 사이트에서만, 그리고 브라우저 세션당 한 번만 집계 */
-  let count = false;
-  try{
-    count = location.hostname.endsWith('github.io')
-         && !sessionStorage.getItem('iu-counted');
-    if(count) sessionStorage.setItem('iu-counted','1');
-  }catch(e){ count = false; }
-  const path = count ? '/up' : '';
-  /* 키가 아직 없거나 응답이 이상해도 0 으로 처리 (전체가 안 뜨는 것보다 낫다) */
-  const get = k => fetch(API(k)+path)
-    .then(r => r.ok ? r.json() : null)
-    .then(j => (j && typeof j.count === 'number') ? j.count : 0)
-    .catch(() => 0);
-
-  Promise.all([get(dayKey), get('total')]).then(([d,t])=>{
-    if(!d && !t) return;                       // 둘 다 0이면 굳이 표시 안 함
-    document.getElementById('vToday').textContent = d.toLocaleString('ko-KR');
-    document.getElementById('vTotal').textContent = t.toLocaleString('ko-KR');
-    document.getElementById('visits').hidden = false;
-  }).catch(()=>{ /* 카운터 실패해도 대시보드는 그대로 */ });
-})();
 
 /* 경기 결과 (K리그만) */
 const played = league;
