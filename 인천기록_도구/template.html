@@ -244,35 +244,32 @@ tr.me:hover{background:linear-gradient(90deg,rgba(226,179,60,.28),rgba(226,179,6
   </div>
 </section>
 
-<div class="grid2" style="margin-top:14px">
+<section>
+  <h2>홈경기 관중 추이</h2>
   <div class="card">
-    <h2 style="margin-bottom:10px">라운드별 득점 · 실점</h2>
-    <div class="chartbox"><canvas id="cGoals"></canvas></div>
-  </div>
-  <div class="card">
-    <h2 style="margin-bottom:10px">홈경기 관중 추이</h2>
     <div class="chartbox"><canvas id="cAtt"></canvas></div>
     <div class="note" id="attNote"></div>
   </div>
-</div>
+</section>
 
 <section>
   <h2>홈 vs 원정</h2>
   <div class="card" id="split"></div>
 </section>
 
-<div class="grid2" style="margin-top:14px">
+<section>
+  <h2>선수별 공격포인트</h2>
   <div class="card">
-    <h2 style="margin-bottom:10px">선수별 공격포인트</h2>
-    <div class="chartbox tall"><canvas id="cGA"></canvas></div>
+    <div class="chartbox" id="gaBox"><canvas id="cGA"></canvas></div>
   </div>
-  <div class="card">
-    <h2 style="margin-bottom:10px">주심별 전적</h2>
-    <div class="scroll"><table id="ref"><thead><tr>
-      <th>주심</th><th>경기</th><th>승</th><th>무</th><th>패</th><th>승점</th><th>평균</th>
-    </tr></thead><tbody></tbody></table></div>
-  </div>
-</div>
+</section>
+
+<section>
+  <h2>주심별 전적</h2>
+  <div class="card scroll"><table id="ref"><thead><tr>
+    <th>주심</th><th>경기</th><th>승</th><th>무</th><th>패</th><th>승점</th><th>평균</th>
+  </tr></thead><tbody></tbody></table></div>
+</section>
 
 <section>
   <h2>선수 기록 <span class="tag">열 제목 클릭 → 정렬</span></h2>
@@ -532,23 +529,12 @@ mkChart('cRank',{type:'line',
     &nbsp;|&nbsp; 시즌 최고 ${best}위 · 최저 ${worst}위`;
 }
 
-/* 득점/실점 */
-mkChart('cGoals',{type:'bar',
- data:{labels:league.map(m=>'R'+m.round),
-  datasets:[{label:'득점',data:league.map(m=>m.gf),backgroundColor:SKY,borderRadius:3},
-            {label:'실점',data:league.map(m=>-m.ga),backgroundColor:RED,borderRadius:3}]},
- options:{responsive:true,maintainAspectRatio:false,
-  plugins:{legend:{labels:{boxWidth:10,boxHeight:10,usePointStyle:true,pointStyle:'rectRounded'}},
-   tooltip:Object.assign({},tt,{callbacks:{label:c=>c.dataset.label+': '+Math.abs(c.raw)}})},
-  scales:{x:Object.assign(axis(),{stacked:true}),
-          y:Object.assign(axis(),{stacked:true,ticks:{callback:v=>Math.abs(v)}})}}});
-
 /* 홈/원정 */
 const H=D.split[0],A=D.split[1],T=D.split[2];
 const rows=[['경기','pld'],['승','w'],['무','d'],['패','l'],['승점','pts'],
-            ['득점','gf'],['실점','ga'],['경기당 승점','ppg']];
+            ['득점','gf'],['실점','ga']];
 document.getElementById('split').innerHTML = rows.map(([lbl,k])=>{
-  const h=k==='ppg'?H[k].toFixed(2):H[k], a=k==='ppg'?A[k].toFixed(2):A[k];
+  const h=H[k], a=A[k];
   const mx=Math.max(H[k],A[k])||1;
   return `<div class="split">
    <div class="h"><div class="bar"><i style="width:${H[k]/mx*100}%"></i></div><span>${h}</span></div>
@@ -578,16 +564,22 @@ document.getElementById('attNote').innerHTML =
   ${kl.yoy>=0?'+':''}${(kl.yoy*100).toFixed(1)}%</b>)`;
 
 /* 선수 공격포인트 */
-const gaP = D.players.filter(p=>p.ga>0).sort((a,b)=>b.ga-a.ga);
+const gaP = D.players.filter(p=>p.ga>0)
+  .sort((a,b)=>b.ga-a.ga || b.g-a.g || a.name.localeCompare(b.name,'ko'));
+/* 선수 수에 맞춰 높이를 늘려야 이름이 하나도 안 잘린다 */
+document.getElementById('gaBox').style.height = (gaP.length*30 + 70) + 'px';
 mkChart('cGA',{type:'bar',
  data:{labels:gaP.map(p=>p.name),
   datasets:[{label:'득점',data:gaP.map(p=>p.g),backgroundColor:BLUE,borderRadius:3},
             {label:'도움',data:gaP.map(p=>p.a),backgroundColor:SKY,borderRadius:3}]},
  options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,
+  layout:{padding:{right:10}},
   plugins:{legend:{labels:{boxWidth:10,boxHeight:10,usePointStyle:true,pointStyle:'rectRounded'}},
-   tooltip:tt},
-  scales:{x:Object.assign(axis(),{stacked:true,ticks:{stepSize:1}}),
-          y:Object.assign(axis(),{stacked:true,grid:{display:false}})}}});
+   tooltip:Object.assign({},tt,{callbacks:{
+     footer:c=>'공격P '+gaP[c[0].dataIndex].ga}})},
+  scales:{x:Object.assign(axis(),{stacked:true,ticks:{stepSize:1,precision:0}}),
+          y:{stacked:true,grid:{display:false},
+             ticks:{autoSkip:false,font:{size:11.5},padding:2,crossAlign:'far'}}}}});
 
 /* 선수 테이블 */
 let sortK='ga', sortD=-1;
