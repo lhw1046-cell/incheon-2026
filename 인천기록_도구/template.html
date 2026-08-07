@@ -373,7 +373,8 @@ if(next){
   const playerCard = (team,kp,fallback) => kp
     ? `<div class="pv-player">
          <div class="av" style="background:${TC[team]}">${kp.name.slice(0,1)}</div>
-         <div><div class="n">${kp.name}</div><div class="d">${kp.note||''}</div></div>
+         <div><div class="n">${kp.name}${kp.pos?`<span style="font-size:10px;color:var(--dim);font-weight:600;margin-left:5px">${kp.pos}</span>`:''}</div>
+         <div class="d">${kp.note||''}</div></div>
        </div>`
     : `<div class="pv-player"><div class="av" style="background:${TC[team]}">?</div>
          <div><div class="n">—</div><div class="d">${fallback}</div></div></div>`;
