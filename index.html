@@ -265,13 +265,6 @@ tr.me:hover{background:linear-gradient(90deg,rgba(226,179,60,.28),rgba(226,179,6
 </section>
 
 <section>
-  <h2>주심별 전적</h2>
-  <div class="card scroll"><table id="ref"><thead><tr>
-    <th>주심</th><th>경기</th><th>승</th><th>무</th><th>패</th><th>승점</th><th>평균</th>
-  </tr></thead><tbody></tbody></table></div>
-</section>
-
-<section>
   <h2>선수 기록 <span class="tag">열 제목 클릭 → 정렬</span></h2>
   <div class="card scroll">
     <table id="pl"><thead><tr>
@@ -280,6 +273,14 @@ tr.me:hover{background:linear-gradient(90deg,rgba(226,179,60,.28),rgba(226,179,6
       <th data-k="ga">공격P</th><th style="width:120px">출전 분포</th>
     </tr></thead><tbody></tbody></table>
   </div>
+</section>
+
+<section>
+  <h2>주심별 전적 <span class="tag">승률 = 승 ÷ 경기</span></h2>
+  <div class="card scroll"><table id="ref"><thead><tr>
+    <th>주심</th><th>경기</th><th>승</th><th>무</th><th>패</th><th>승점</th>
+    <th>승률</th><th style="width:110px">승률 바</th>
+  </tr></thead><tbody></tbody></table></div>
 </section>
 
 <div class="foot">
@@ -604,11 +605,18 @@ document.querySelectorAll('#pl th[data-k]').forEach(th=>{
 });
 drawPl();
 
-/* 주심 */
+/* 주심 — 승률(%) = 승 ÷ 경기 */
 document.querySelector('#ref tbody').innerHTML =
- [...D.refs].sort((a,b)=>b.pld-a.pld||b.pts-a.pts).map(r=>`
-  <tr><td>${r.name}</td><td>${r.pld}</td><td>${r.w}</td><td>${r.d}</td><td>${r.l}</td>
-  <td class="pts">${r.pts}</td><td>${(r.pts/r.pld).toFixed(2)}</td></tr>`).join('');
+ [...D.refs]
+ .sort((a,b)=>(b.w/b.pld)-(a.w/a.pld) || b.pld-a.pld || b.pts-a.pts)
+ .map(r=>{
+   const wr = r.pld ? r.w/r.pld : 0;
+   const col = wr>=.6?GREEN : wr<=.2?RED : DIM;
+   return `<tr><td>${r.name}</td><td>${r.pld}</td><td>${r.w}</td><td>${r.d}</td><td>${r.l}</td>
+   <td class="pts">${r.pts}</td>
+   <td style="color:${col};font-weight:750">${(wr*100).toFixed(1)}%</td>
+   <td><div class="bar"><i style="width:${wr*100}%"></i></div></td></tr>`;
+ }).join('');
 
 /* 경기 결과 (K리그만) */
 const played = league;
