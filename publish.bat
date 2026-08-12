@@ -1,5 +1,5 @@
 @echo off
-setlocal
+setlocal EnableExtensions
 cd /d "%~dp0"
 
 echo ==========================================
@@ -15,41 +15,50 @@ if not exist ".git" (
 
 if not exist "index.html" (
   echo [!] index.html not found.
-  echo     Ask Claude to regenerate the dashboard first.
   pause
   exit /b 1
 )
 
-echo [1/3] Commit local changes
+set "UPDATER="
+for /d %%D in (*) do if exist "%%D\update_soccer365.ps1" set "UPDATER=%%D\update_soccer365.ps1"
+if not defined UPDATER (
+  echo [!] update_soccer365.ps1 not found.
+  pause
+  exit /b 1
+)
+
+echo [1/4] Update from Soccer365
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File "%UPDATER%"
+if errorlevel 1 (
+  echo.
+  echo [!] Soccer365 update failed. Nothing was published.
+  echo     Close the Excel workbook, check the internet connection,
+  echo     and try again.
+  pause
+  exit /b 1
+)
+echo.
+
+echo [2/4] Commit local changes
 git add -A
 git diff --cached --quiet
 if errorlevel 1 (
-  git commit -m "update dashboard"
+  git commit -m "update dashboard from Soccer365"
 ) else (
   echo     nothing new to commit.
 )
 echo.
 
-echo [2/3] Sync with GitHub
+echo [3/4] Sync with GitHub
 git fetch origin
+if errorlevel 1 goto :gitfail
 git merge -X ours --no-edit origin/main
-if errorlevel 1 (
-  echo.
-  echo [!] Merge conflict. Run:  git merge --abort
-  echo     then ask Claude to resolve it.
-  pause
-  exit /b 1
-)
+if errorlevel 1 goto :mergefail
 echo.
 
-echo [3/3] Push
+echo [4/4] Push
 git push
-if errorlevel 1 (
-  echo.
-  echo [!] Push failed. Check internet or GitHub login.
-  pause
-  exit /b 1
-)
+if errorlevel 1 goto :pushfail
 
 echo.
 echo ==========================================
@@ -58,3 +67,19 @@ echo   https://lhw1046-cell.github.io/incheon-2026/
 echo ==========================================
 echo.
 pause
+exit /b 0
+
+:gitfail
+echo [!] GitHub fetch failed. Check internet or GitHub login.
+pause
+exit /b 1
+
+:mergefail
+echo [!] Merge conflict. Nothing was pushed.
+pause
+exit /b 1
+
+:pushfail
+echo [!] Push failed. Check internet or GitHub login.
+pause
+exit /b 1
