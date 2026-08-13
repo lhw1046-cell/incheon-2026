@@ -371,12 +371,12 @@ const PPOS = {
   /* GK */ '김동헌':'GK','이태희':'GK','이상현':'GK','왕민준':'GK',
   /* DF */ '이비자':'DF','이주용':'DF','김건희':'DF','김성민':'DF','최승구':'DF',
            '박경섭':'DF','여승원':'DF','이상기':'DF','정태욱':'DF','민경현':'DF',
-           '오준엽':'DF','이준섭':'DF','김연수':'DF',
+           '김연수':'DF','고정민':'DF','강영훈':'DF',
   /* MF */ '이명주':'MF','서재민':'MF','김명순':'MF','이청용':'MF','오후성':'MF',
-           '이케르':'MF','문지환':'MF','정원진':'MF','성힘찬':'MF','김영환':'MF',
-           '고정민':'MF','강영훈':'MF',
+           '이케르':'MF','문지환':'MF','정원진':'MF','오준엽':'MF','김영환':'MF',
   /* FW */ '무고사':'FW','페리어':'FW','제르소':'FW','이동률':'FW','정치인':'FW',
-           '박승호':'FW','박호민':'FW','백민규':'FW','홍시후':'FW'
+           '박승호':'FW','박호민':'FW','백민규':'FW','홍시후':'FW','성힘찬':'FW',
+           '이준섭':'FW'
 };
 const POSC = {GK:'#E2B33C', DF:'#2BA88A', MF:'#2E9BFF', FW:'#E8574A'};
 
@@ -384,18 +384,64 @@ const POSC = {GK:'#E2B33C', DF:'#2BA88A', MF:'#2E9BFF', FW:'#E8574A'};
    type: 완전영입 | 임대영입 | 완전이적 | 임대이적 | 군입대 | 계약해지
    OUT 에 이름이 있으면 선수 기록 표에서 회색 + 태그로 표시된다.            */
 const MOVE_IN = [
-  {name:'이청용', from:'울산 HD',            type:'완전영입', date:'2026-02-10'},
-  {name:'이케르', from:'조호르 (말레이시아)', type:'완전영입', date:'2026-01-15', note:'자유계약'},
-  {name:'정태욱', from:'전북 현대',          type:'완전영입', date:'2026-01'},
+  /* 여름 */
+  {name:'김영환', pos:'MF', from:'—',                  type:'임대영입', win:'여름', note:'출신 구단 확인 필요'},
+  {name:'김연수', pos:'DF', from:'김천 상무',           type:'군 복귀',  win:'여름'},
+  /* 겨울 — 일반 영입 */
+  {name:'서재민', pos:'MF', from:'서울 이랜드',         type:'자유계약', win:'겨울'},
+  {name:'오후성', pos:'FW', from:'광주 FC',             type:'자유계약', win:'겨울'},
+  {name:'강영훈', pos:'DF', from:'천안 시티',           type:'자유계약', win:'겨울'},
+  {name:'이케르', pos:'MF', from:'조호르 다룰 탁짐',    type:'자유계약', win:'겨울'},
+  {name:'페리어', pos:'FW', from:'AEL 리마솔',          type:'자유계약', win:'겨울'},
+  {name:'이청용', pos:'MF', from:'울산 HD',             type:'자유계약', win:'겨울'},
+  {name:'정태욱', pos:'DF', from:'전북 현대',           type:'완전영입', win:'겨울'},
+  {name:'정치인', pos:'FW', from:'대구 FC',             type:'완전영입', win:'겨울'},
+  /* 겨울 — 임대 영입 */
+  {name:'여승원', pos:'DF', from:'대전 하나 시티즌',    type:'임대영입', win:'겨울', note:'2026 임대'},
+  {name:'이비자', pos:'DF', from:'부리람 유나이티드',   type:'임대영입', win:'겨울', note:'2026 임대'},
+  /* 겨울 — 신인 */
+  {name:'왕민준', pos:'GK', from:'동명대',              type:'신인',    win:'겨울'},
+  {name:'이준섭', pos:'FW', from:'인천대건고',          type:'신인',    win:'겨울', note:'2025 우선지명'},
+  {name:'오준엽', pos:'MF', from:'한양대',              type:'신인',    win:'겨울'},
+  {name:'고정민', pos:'DF', from:'보인고',              type:'신인',    win:'겨울'},
 ];
 const MOVE_OUT = [
-  {name:'강영훈', to:'김천 상무',            type:'군입대',   date:'2026-08-03'},
-  {name:'박호민', to:'사간 도스 (일본)',     type:'완전이적', date:'2026-07'},
-  {name:'정태욱', to:'우타이타니 (태국)',    type:'완전이적', date:'2026-07', note:'계약 해지 후 이적'},
+  /* 여름 */
+  {name:'강영훈', pos:'DF', to:'김천 상무',             type:'군입대',   win:'여름', note:'2026-08-03 입대'},
+  {name:'박호민', pos:'FW', to:'사간 도스 (일본)',      type:'완전이적', win:'여름'},
+  {name:'정태욱', pos:'DF', to:'우타이타니 (태국)',     type:'완전이적', win:'여름', note:'계약 해지 후 이적'},
+  /* 겨울 — 임대 방출 · 군입대 */
+  {name:'홍시후', pos:'FW', to:'김천 상무',             type:'군입대',   win:'겨울', note:'2025-11-17 ~ 2027-05-16'},
+  {name:'성힘찬', pos:'FW', to:'FC 목포',               type:'임대이적', win:'겨울', note:'2026 임대'},
+  {name:'쇼타',   pos:'FW', to:'시아노르치 (일본)',     type:'임대이적', win:'겨울', note:'2026 임대'},
+  /* 겨울 — 완전 이적 */
+  {name:'김민석', pos:'FW', to:'김포 FC',               type:'완전이적', win:'겨울'},
+  {name:'김동민', pos:'DF', to:'김포 FC',               type:'완전이적', win:'겨울'},
+  {name:'김도혁', pos:'MF', to:'김포 FC',               type:'완전이적', win:'겨울'},
+  /* 겨울 — 계약 종료 등 */
+  {name:'김건웅', pos:'MF', to:'제주 SK',               type:'임대종료', win:'겨울'},
+  {name:'임형진', pos:'DF', to:'용인 FC',               type:'계약만료', win:'겨울'},
+  {name:'신진호', pos:'MF', to:'용인 FC',               type:'계약만료', win:'겨울'},
+  {name:'황성민', pos:'GK', to:'용인 FC',               type:'계약만료', win:'겨울'},
+  {name:'김보섭', pos:'FW', to:'용인 FC',               type:'계약만료', win:'겨울'},
+  {name:'민성준', pos:'GK', to:'서울 이랜드',           type:'계약만료', win:'겨울'},
+  {name:'델브리지',pos:'DF', to:'멜버른 시티 (호주)',   type:'계약만료', win:'겨울'},
+  {name:'이범수', pos:'GK', to:'경남 FC',               type:'계약만료', win:'겨울'},
+  {name:'서동한', pos:'FW', to:'파주 프런티어',         type:'계약만료', win:'겨울'},
+  {name:'강윤구', pos:'DF', to:'수원 FC',               type:'계약만료', win:'겨울'},
+  {name:'강민성', pos:'FW', to:'—',                     type:'계약만료', win:'겨울'},
+  {name:'김현서', pos:'MF', to:'—',                     type:'계약만료', win:'겨울'},
+  {name:'강도욱', pos:'MF', to:'—',                     type:'계약만료', win:'겨울'},
+  {name:'이가람', pos:'MF', to:'—',                     type:'계약만료', win:'겨울'},
+  {name:'바로우', pos:'FW', to:'—',                     type:'계약해지', win:'겨울'},
 ];
-const MTYPEC = {'완전영입':'#2E9BFF','임대영입':'#2BA88A','완전이적':'#E8574A',
-                '임대이적':'#F58220','군입대':'#E2B33C','계약해지':'#8CA0C3'};
-const OUTMAP = Object.fromEntries(MOVE_OUT.map(m=>[m.name,m]));
+const MTYPEC = {'자유계약':'#2E9BFF','완전영입':'#2E9BFF','임대영입':'#2BA88A',
+                '신인':'#9B6BFF','군 복귀':'#4FE39B',
+                '완전이적':'#E8574A','임대이적':'#F58220','군입대':'#E2B33C',
+                '계약만료':'#8CA0C3','임대종료':'#8CA0C3','계약해지':'#8CA0C3'};
+/* 이름 중복 시 가장 최근(여름) 건이 남도록 겨울부터 넣는다 */
+const OUTMAP = Object.fromEntries(
+  [...MOVE_OUT].reverse().map(m=>[m.name,m]));
 const posTag = n => {
   const p = PPOS[n];
   return p ? `<span class="ptag" style="background:${POSC[p]}22;color:${POSC[p]};
@@ -749,24 +795,29 @@ document.querySelector('#ref tbody').innerHTML =
 const statOf = n => D.players.find(p=>p.name===n);
 const moveRow = (m, dir) => {
   const c = MTYPEC[m.type] || '#8CA0C3';
+  const p = m.pos || PPOS[m.name];
+  const tag = p ? `<span class="ptag" style="background:${POSC[p]}22;color:${POSC[p]};
+    border-color:${POSC[p]}55">${p}</span>` : '';
   const s = statOf(m.name);
-  const rec = s && s.app ? ` <span class="club">· 26시즌 ${s.app}경기 ${s.g}골 ${s.a}도움</span>` : '';
+  const rec = s && s.app ? `26시즌 ${s.app}경기 ${s.g}골 ${s.a}도움` : '';
+  const sub = [m.note, rec].filter(Boolean).join(' · ');
   return `<div class="mrow2">
     <div>
       <div class="who">
-        <b>${m.name}</b>${posTag(m.name)}
+        <b>${m.name}</b>${tag}
         <span class="mtag" style="background:${c}1f;color:${c};border-color:${c}55">${m.type}</span>
         <span class="club">${dir==='in'?'←':'→'} ${(dir==='in'?m.from:m.to)||'—'}</span>
       </div>
-      ${m.note||rec ? `<div class="mnote">${m.note||''}${m.note&&rec?' ':''}${rec}</div>` : ''}
+      ${sub ? `<div class="mnote">${sub}</div>` : ''}
     </div>
-    <div class="when">${m.date||''}</div>
+    <div class="when">${m.win||''}</div>
   </div>`;
 };
 const empty = '<span style="color:var(--dim);font-size:12px">해당 없음</span>';
 document.getElementById('moveIn').innerHTML  = MOVE_IN.length  ? MOVE_IN.map(m=>moveRow(m,'in')).join('')  : empty;
 document.getElementById('moveOut').innerHTML = MOVE_OUT.length ? MOVE_OUT.map(m=>moveRow(m,'out')).join('') : empty;
 
+/* 임대·군입대 = 소속은 인천이지만 지금 팀을 떠나 있는 선수 */
 const loans = MOVE_OUT.filter(m=>m.type==='군입대'||m.type==='임대이적');
 document.getElementById('loanList').innerHTML = loans.length
   ? loans.map(m=>moveRow(m,'out')).join('')
