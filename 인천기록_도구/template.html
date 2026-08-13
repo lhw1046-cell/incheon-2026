@@ -81,6 +81,11 @@ tr.me:hover{background:linear-gradient(90deg,rgba(226,179,60,.28),rgba(226,179,6
 .ptag{display:inline-block;min-width:26px;text-align:center;font-size:11px;
   font-weight:800;letter-spacing:.4px;padding:2px 5px;border-radius:5px;
   border:1px solid transparent}
+/* 최근 5경기 원형 배지 */
+.frm5{display:flex;gap:4px;justify-content:flex-end}
+.fc{width:21px;height:21px;border-radius:50%;display:grid;place-items:center;
+  font-size:11px;font-weight:800;color:#fff;cursor:help;flex:none;
+  box-shadow:0 1px 3px rgba(0,0,0,.35)}
 /* 선수 기록 — 이름과 포지션을 붙여서 표시 */
 #pl td:nth-child(1),#pl th:nth-child(1){width:1%;padding-right:3px;white-space:nowrap}
 #pl td:nth-child(2),#pl th:nth-child(2){padding-left:0;text-align:left}
@@ -268,7 +273,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <div class="card scroll">
     <table id="tbl"><thead><tr>
       <th>순위</th><th>팀</th><th>경기</th><th>승</th><th>무</th><th>패</th>
-      <th>득점</th><th>실점</th><th>득실</th><th>승점</th><th style="width:110px">승점 바</th>
+      <th>득점</th><th>실점</th><th>득실</th><th>승점</th>
+      <th style="width:132px">최근 5경기</th>
     </tr></thead><tbody></tbody></table>
     <div class="note">
       <span class="zone" style="background:var(--sky)"></span>ACL 엘리트 리그스테이지 &nbsp;
@@ -495,6 +501,17 @@ document.getElementById('kpis').innerHTML = kpis.map(k=>
 
 /* ---------- 순위표 ---------- */
 const zoneOf=p=>p===1?SKY:(p<=3?BLUE:(p===12?RED:'transparent'));
+
+/* 최근 5경기 — 왼쪽이 오래된 경기, 원 안에 승/무/패 */
+const F5C = {'승':'#22C55E','무':'#9CA3AF','패':'#EF4444'};
+const form5 = team => {
+  const ms = ((D.teamMatches||{})[team]||[]).slice(-5);
+  if(!ms.length) return '<span style="color:var(--gray)">—</span>';
+  return `<div class="frm5">${ms.map(m=>
+    `<span class="fc" style="background:${F5C[m.res]}"
+       title="R${m.round} ${m.ha==='홈'?'vs':'@'} ${m.opp}  ${m.gf}-${m.ga}">${m.res}</span>`
+  ).join('')}</div>`;
+};
 document.querySelector('#tbl tbody').innerHTML = D.table.map(t=>`
  <tr class="${t.team==='인천'?'me':''}">
   <td class="pos"><span class="zone" style="background:${zoneOf(t.pos)}"></span>${t.pos}</td>
@@ -503,7 +520,7 @@ document.querySelector('#tbl tbody').innerHTML = D.table.map(t=>`
   <td>${t.gf}</td><td>${t.ga}</td>
   <td class="${t.gd>0?'pos-gd':(t.gd<0?'neg-gd':'')}">${t.gd>0?'+':''}${t.gd}</td>
   <td class="pts">${t.pts}</td>
-  <td><div class="bar"><i style="width:${t.pts/D.table[0].pts*100}%"></i></div></td>
+  <td>${form5(t.team)}</td>
  </tr>`).join('');
 
 /* ---------- 다음 경기 프리뷰 + 일정 ---------- */
