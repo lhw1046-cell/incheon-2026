@@ -78,6 +78,9 @@ tr.me:hover{background:linear-gradient(90deg,rgba(226,179,60,.28),rgba(226,179,6
   vertical-align:-3px}
 .tdot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:7px;
   vertical-align:0;box-shadow:0 0 0 1.5px rgba(255,255,255,.10)}
+.ptag{display:inline-block;min-width:26px;text-align:center;font-size:9.5px;
+  font-weight:800;letter-spacing:.4px;padding:2px 5px;border-radius:5px;
+  border:1px solid transparent}
 .pos{color:var(--dim);font-weight:650}
 .pts{font-weight:800;color:#fff}
 .pos-gd{color:var(--green)} .neg-gd{color:var(--red)}
@@ -285,7 +288,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <h2>선수 기록 <span class="tag">열 제목 클릭 → 정렬</span></h2>
   <div class="card scroll">
     <table id="pl"><thead><tr>
-      <th data-k="name">이름</th><th data-k="app">출전</th><th data-k="start">선발</th>
+      <th data-k="name">이름</th><th data-k="pos">포지션</th>
+      <th data-k="app">출전</th><th data-k="start">선발</th>
       <th data-k="sub">교체</th><th data-k="g">득점</th><th data-k="a">도움</th>
       <th data-k="ga">공격P</th><th style="width:120px">출전 분포</th>
     </tr></thead><tbody></tbody></table>
@@ -324,25 +328,50 @@ const hex2rgba=(h,a)=>`rgba(${parseInt(h.slice(1,3),16)},${parseInt(h.slice(3,5)
 const fmt=n=>n==null?'—':n.toLocaleString('ko-KR');
 const pct=n=>(n*100).toFixed(1)+'%';
 
+/* ---------- 인천 선수 포지션 (soccer365 기준, 이적/영입 시 여기만 수정) ---------- */
+const PPOS = {
+  /* GK */ '김동헌':'GK','이태희':'GK','이상현':'GK','왕민준':'GK',
+  /* DF */ '이비자':'DF','이주용':'DF','김건희':'DF','김성민':'DF','최승구':'DF',
+           '박경섭':'DF','여승원':'DF','이상기':'DF','정태욱':'DF','민경현':'DF',
+           '오준엽':'DF','이준섭':'DF','김연수':'DF',
+  /* MF */ '이명주':'MF','서재민':'MF','김명순':'MF','이청용':'MF','오후성':'MF',
+           '이케르':'MF','문지환':'MF','정원진':'MF','성힘찬':'MF','김영환':'MF',
+           '고정민':'MF','강영훈':'MF',
+  /* FW */ '무고사':'FW','페리어':'FW','제르소':'FW','이동률':'FW','정치인':'FW',
+           '박승호':'FW','박호민':'FW','백민규':'FW','홍시후':'FW'
+};
+const POSC = {GK:'#E2B33C', DF:'#2BA88A', MF:'#2E9BFF', FW:'#E8574A'};
+const posTag = n => {
+  const p = PPOS[n];
+  return p ? `<span class="ptag" style="background:${POSC[p]}22;color:${POSC[p]};
+    border-color:${POSC[p]}55">${p}</span>` : '';
+};
+
 /* ---------- 파생 ---------- */
 const league = D.matches.filter(m=>m.comp==='K리그' && m.res);
 const me = D.table.find(t=>t.team==='인천');
-const topScorer = [...D.players].sort((a,b)=>b.g-a.g)[0];
+/* 공동 1위가 있으면 이름을 이어 붙인다 */
+const leaderOf = key => {
+  const best = Math.max(0, ...D.players.map(p=>p[key]));
+  const names = D.players.filter(p=>p[key]===best && best>0).map(p=>p.name);
+  return {v: best, names};
+};
+const topScorer  = leaderOf('g');
+const topAssist  = leaderOf('a');
 document.getElementById('asof').textContent =
   `${D.asof}  ·  K리그1 ${me.pos}위  ·  ${me.w}승 ${me.d}무 ${me.l}패`;
 document.getElementById('tblAsOf').textContent = D.asof;
 document.getElementById('ftime').textContent = `최종 갱신 ${D.updated}`;
 
 /* ---------- KPI ---------- */
-const gap1 = D.table[4].pts - me.pts;               // 5위와의 격차
 const kl = D.att.kl;
 const kpis=[
   {l:'리그 순위', v:me.pos+'위', n:`승점 ${me.pts} · ${me.pld}경기`, hl:1},
   {l:'승점', v:me.pts, n:`경기당 ${(me.pts/me.pld).toFixed(2)}점`},
   {l:'득실차', v:(me.gd>0?'+':'')+me.gd, n:`${me.gf}득점 ${me.ga}실점`},
-  {l:'5위와 격차', v:(gap1>0?'-':'+')+Math.abs(gap1), n:`5위 ${D.table[4].team} ${D.table[4].pts}점`},
   {l:'평균 관중', v:Math.round(kl.avg).toLocaleString(), n:`전년 대비 ${kl.yoy>=0?'+':''}${(kl.yoy*100).toFixed(1)}%`},
-  {l:'최다 득점', v:topScorer.g, n:topScorer.name},
+  {l:'최다 득점', v:topScorer.v, n:topScorer.names.join(', ')||'—'},
+  {l:'최다 도움', v:topAssist.v, n:topAssist.names.join(', ')||'—'},
 ];
 document.getElementById('kpis').innerHTML = kpis.map(k=>
   `<div class="kpi ${k.hl?'hl':''}"><div class="l">${k.l}</div>
@@ -466,12 +495,17 @@ document.getElementById('sched').innerHTML = upcoming.length
  : '<span style="color:var(--dim)">남은 일정이 없습니다.</span>';
 
 /* ---------- 폼 ---------- */
+/* 득점자와 도움을 같은 순서로 짝지어 보여준다 (헷갈림 방지) */
+const goalLines = m => m.scorers.map((s,i)=>{
+  const a = m.assists[i];
+  return `<br>⚽ ${s}${a?` <span style="color:${GREEN}">← ${a}</span>`:''}`;
+}).join('') + (m.assists.length>m.scorers.length
+  ? `<br>🅰 ${m.assists.slice(m.scorers.length).join(', ')}` : '');
+
 document.getElementById('form').innerHTML = league.map(m=>{
-  const g = m.scorers.length?`<br>⚽ ${m.scorers.join(', ')}`:'';
-  const a = m.assists.length?`<br>🅰 ${m.assists.join(', ')}`:'';
   return `<div class="pill ${RC[m.res]}">${m.res}
     <span class="tip"><b>R${m.round} ${m.ha==='홈'?'vs':'@'} ${m.opp}</b> ${m.gf}-${m.ga}
-    <br>${m.date||''}${g}${a}</span></div>`;
+    <br>${m.date||''}${goalLines(m)}</span></div>`;
 }).join('');
 
 /* ---------- Chart 공통 ---------- */
@@ -607,14 +641,20 @@ mkChart('cGA',{type:'bar',
 /* 선수 테이블 */
 let sortK='ga', sortD=-1;
 const maxApp = Math.max(...D.players.map(p=>p.app))||1;
+const POSORD = {GK:0, DF:1, MF:2, FW:3};
 function drawPl(){
   const rows=[...D.players].sort((a,b)=>{
+    if(sortK==='pos'){                                  /* 포지션 = GK→DF→MF→FW */
+      const x=POSORD[PPOS[a.name]]??9, y=POSORD[PPOS[b.name]]??9;
+      return sortD*(x-y) || b.ga-a.ga;
+    }
     const x=a[sortK],y=b[sortK];
     if(typeof x==='string') return sortD*x.localeCompare(y,'ko');
     return sortD*(x-y);
   });
   document.querySelector('#pl tbody').innerHTML = rows.map(p=>`
-   <tr><td>${p.name}</td><td>${p.app}</td><td>${p.start}</td><td>${p.sub}</td>
+   <tr><td>${p.name}</td><td>${posTag(p.name)||'<span style="color:#4b5670">–</span>'}</td>
+   <td>${p.app}</td><td>${p.start}</td><td>${p.sub}</td>
    <td${p.g?' style="color:'+SKY+';font-weight:700"':''}>${p.g}</td>
    <td${p.a?' style="color:'+GREEN+';font-weight:700"':''}>${p.a}</td>
    <td style="font-weight:750">${p.ga}</td>
