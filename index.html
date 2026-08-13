@@ -385,8 +385,8 @@ const POSC = {GK:'#E2B33C', DF:'#2BA88A', MF:'#2E9BFF', FW:'#E8574A'};
    OUT 에 이름이 있으면 선수 기록 표에서 회색 + 태그로 표시된다.            */
 const MOVE_IN = [
   /* 여름 */
-  {name:'김영환', pos:'MF', from:'—',                  type:'임대영입', win:'여름', note:'출신 구단 확인 필요'},
-  {name:'김연수', pos:'DF', from:'김천 상무',           type:'군 복귀',  win:'여름'},
+  {name:'김영환', pos:'MF', from:'전북 현대',           type:'임대영입', win:'여름'},
+  {name:'김연수', pos:'DF', from:'서울 TNT',            type:'공익 복귀', win:'여름', note:'사회복무 중 서울 TNT에서 활동'},
   /* 겨울 — 일반 영입 */
   {name:'서재민', pos:'MF', from:'서울 이랜드',         type:'자유계약', win:'겨울'},
   {name:'오후성', pos:'FW', from:'광주 FC',             type:'자유계약', win:'겨울'},
@@ -413,7 +413,7 @@ const MOVE_OUT = [
   /* 겨울 — 임대 방출 · 군입대 */
   {name:'홍시후', pos:'FW', to:'김천 상무',             type:'군입대',   win:'겨울', note:'2025-11-17 ~ 2027-05-16'},
   {name:'성힘찬', pos:'FW', to:'FC 목포',               type:'임대이적', win:'겨울', note:'2026 임대'},
-  {name:'쇼타',   pos:'FW', to:'시아노르치 (일본)',     type:'임대이적', win:'겨울', note:'2026 임대'},
+  {name:'쇼타',   pos:'FW', to:'시아노르치 (브라질)',   type:'임대이적', win:'겨울', note:'2026 임대'},
   /* 겨울 — 완전 이적 */
   {name:'김민석', pos:'FW', to:'김포 FC',               type:'완전이적', win:'겨울'},
   {name:'김동민', pos:'DF', to:'김포 FC',               type:'완전이적', win:'겨울'},
@@ -436,7 +436,7 @@ const MOVE_OUT = [
   {name:'바로우', pos:'FW', to:'—',                     type:'계약해지', win:'겨울'},
 ];
 const MTYPEC = {'자유계약':'#2E9BFF','완전영입':'#2E9BFF','임대영입':'#2BA88A',
-                '신인':'#9B6BFF','군 복귀':'#4FE39B',
+                '신인':'#9B6BFF','군 복귀':'#4FE39B','공익 복귀':'#4FE39B',
                 '완전이적':'#E8574A','임대이적':'#F58220','군입대':'#E2B33C',
                 '계약만료':'#8CA0C3','임대종료':'#8CA0C3','계약해지':'#8CA0C3'};
 /* 이름 중복 시 가장 최근(여름) 건이 남도록 겨울부터 넣는다 */
