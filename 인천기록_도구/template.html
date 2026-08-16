@@ -526,9 +526,25 @@ document.querySelector('#tbl tbody').innerHTML = D.table.map(t=>`
 /* ---------- 다음 경기 프리뷰 + 일정 ---------- */
 /* 생성 시점이 아니라 '보는 시점' 기준 — 접속할 때마다 D-day가 다시 계산된다 */
 const TODAY = new Date().toLocaleDateString('sv-SE',{timeZone:'Asia/Seoul'});
-/* 경기 당일에는 이 시각(한국시간)이 지나야 다음 경기로 넘어간다 */
-const SWITCH_HOUR = 22;
-const KST_HOUR = +new Date().toLocaleString('en-GB',{timeZone:'Asia/Seoul',hour:'2-digit',hour12:false});
+/* ── 라운드별 킥오프 시각(한국시간). 일정이 바뀌면 여기만 고치면 된다 ──
+   경기 시작 + MATCH_MIN 분이 지나면 '다음 경기'가 그 다음 일정으로 넘어간다.
+   목록에 없는 라운드는 KO_DEFAULT 로 계산한다. */
+const KICKOFF = {
+  22:'19:00', 23:'19:30', 24:'19:30', 25:'19:30', 26:'19:30', 27:'19:00',
+  28:'19:30', 29:'16:30', 30:'19:00', 31:'16:30', 32:'16:30', 33:'14:00'
+};
+const KO_DEFAULT = '19:30';
+const MATCH_MIN  = 150;                     /* 킥오프 후 2시간 30분 */
+const kstNowMin = (()=>{
+  const t = new Date().toLocaleString('en-GB',
+    {timeZone:'Asia/Seoul',hour:'2-digit',minute:'2-digit',hour12:false});
+  const [h,m] = t.split(':').map(Number);
+  return h*60+m;
+})();
+const koMin = r => {
+  const [h,m] = (KICKOFF[r]||KO_DEFAULT).split(':').map(Number);
+  return h*60+m;
+};
 const upcoming = D.matches
   .filter(m=>m.comp==='K리그' && !m.res)
   .sort((a,b)=>{
@@ -536,18 +552,24 @@ const upcoming = D.matches
     if(a.iso) return -1; if(b.iso) return 1;
     return (a.round||99)-(b.round||99);
   });
-/* 지난 경기 판정 — 당일 경기는 SWITCH_HOUR 전까지 '다음 경기'로 유지 */
+/* 지난 경기 판정 — 당일 경기는 킥오프 + MATCH_MIN 이 지나야 넘어간다 */
 const isPast = m => {
   if(!m.iso) return false;                       /* 날짜 미정이면 지나지 않은 것으로 */
   if(m.iso > TODAY) return false;
   if(m.iso < TODAY) return true;
-  return KST_HOUR >= SWITCH_HOUR;
+  return kstNowMin >= koMin(m.round) + MATCH_MIN;
 };
-const next = upcoming.find(m=>!isPast(m)) || upcoming[upcoming.length-1];
-const dday = iso => {
+/* 상대가 정해진 경기만 프리뷰 대상 (34~38R 스플릿 라운드는 편성 전) */
+const next = upcoming.find(m=>!isPast(m) && m.opp) || null;
+const dday = (iso, round) => {
   if(!iso) return '';
   const d = Math.round((new Date(iso+'T00:00:00')-new Date(TODAY+'T00:00:00'))/864e5);
-  if(d===0) return KST_HOUR>=SWITCH_HOUR ? '경기 종료' : '오늘';
+  if(d===0){
+    const k = koMin(round);
+    if(kstNowMin >= k + MATCH_MIN) return '경기 종료';
+    if(kstNowMin >= k) return '경기 중';
+    return '오늘';
+  }
   if(d===1) return '내일';
   return d>0 ? `D-${d}` : '';
 };
@@ -580,7 +602,8 @@ if(next){
       <span class="badge">${next.round}R</span>
       <span class="badge ghost">${next.date||'일정 미정'}${next.dow?' ('+next.dow+')':''}</span>
       <span class="badge ghost">${home?'홈':'원정'}</span>
-      ${dday(next.iso)?`<span class="badge ghost" style="color:${TC['인천']}">${dday(next.iso)}</span>`:''}
+      ${dday(next.iso,next.round)?`<span class="badge ghost" style="color:${TC['인천']}">${dday(next.iso,next.round)}</span>`:''}
+      <span class="badge ghost">${KICKOFF[next.round]||KO_DEFAULT} 킥오프</span>
     </div>
     <div class="pv-vs">
       <div class="pv-team">
@@ -636,7 +659,7 @@ document.getElementById('sched').innerHTML = upcoming.length
      <div>${m.opp?`<span class="tdot" style="background:${TC[m.opp]||'#8CA0C3'}"></span>${m.opp}`
              :'<span class="tbd">스플릿 라운드 · 상대 미정</span>'}
        ${m.ha?`<span class="ha ${m.ha==='홈'?'H':'A'}">${m.ha}</span>`:''}</div>
-     <div class="d" style="text-align:right">${dday(m.iso)}</div>
+     <div class="d" style="text-align:right">${dday(m.iso,m.round)}</div>
    </div>`).join('')
  : '<span style="color:var(--dim)">남은 일정이 없습니다.</span>';
 
