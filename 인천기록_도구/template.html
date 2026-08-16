@@ -647,7 +647,9 @@ if(next){
   </div>`;
 } else {
   document.getElementById('preview').innerHTML =
-    `<div class="card"><span style="color:var(--dim)">남은 일정이 없습니다.</span></div>`;
+    `<div class="card"><span style="color:var(--dim)">${
+       upcoming.length ? '정규 33라운드 종료 · 스플릿 라운드 편성 대기'
+                       : '시즌 일정이 모두 끝났습니다.'}</span></div>`;
 }
 
 document.getElementById('sched').innerHTML = upcoming.length
