@@ -524,7 +524,8 @@ document.querySelector('#tbl tbody').innerHTML = D.table.map(t=>`
  </tr>`).join('');
 
 /* ---------- 다음 경기 프리뷰 + 일정 ---------- */
-const TODAY = D.today || new Date().toISOString().slice(0,10);
+/* 생성 시점이 아니라 '보는 시점' 기준 — 접속할 때마다 D-day가 다시 계산된다 */
+const TODAY = new Date().toLocaleDateString('sv-SE',{timeZone:'Asia/Seoul'});
 const upcoming = D.matches
   .filter(m=>m.comp==='K리그' && !m.res)
   .sort((a,b)=>{
@@ -535,8 +536,10 @@ const upcoming = D.matches
 const next = upcoming.find(m=>!m.iso || m.iso>=TODAY) || upcoming[0];
 const dday = iso => {
   if(!iso) return '';
-  const d = Math.round((new Date(iso)-new Date(TODAY))/864e5);
-  return d===0?'오늘':d>0?`D-${d}`:'';
+  const d = Math.round((new Date(iso+'T00:00:00')-new Date(TODAY+'T00:00:00'))/864e5);
+  if(d===0) return '오늘';
+  if(d===1) return '내일';
+  return d>0 ? `D-${d}` : '';
 };
 const badgeOf = t => `<div class="pv-badge" style="background:linear-gradient(145deg,${TC[t]||'#8CA0C3'},${hex2rgba(TC[t]||'#8CA0C3',.55)})">${t}</div>`;
 const miniForm = arr => `<div class="miniform">${arr.map(r=>{
