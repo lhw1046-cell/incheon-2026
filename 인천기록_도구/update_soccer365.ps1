@@ -455,8 +455,10 @@ function Update-Workbook($matches, $lineups, $standings, [string]$asof) {
             $round = [int]$match.round; if ($round -lt 1 -or $round -gt 38) { continue }
             $row = $round + 2
             Set-ExcelCell $main $row 1 $config.labels.competition
-            Set-ExcelCell $main $row 2 $match.date
-            Set-ExcelCell $main $row 3 $match.dow
+            # 경기 당일에는 Soccer365가 날짜 대신 라이브 표기를 보내 파싱이 실패한다.
+            # 이때 null 로 덮어쓰면 기존 일정이 지워지므로, 값이 있을 때만 기록한다.
+            if ($match.date) { Set-ExcelCell $main $row 2 $match.date }
+            if ($match.dow)  { Set-ExcelCell $main $row 3 $match.dow }
             Set-ExcelCell $main $row 4 $round
             Set-ExcelCell $main $row 5 $match.opp
             Set-ExcelCell $main $row 6 $match.ha

@@ -526,6 +526,9 @@ document.querySelector('#tbl tbody').innerHTML = D.table.map(t=>`
 /* ---------- 다음 경기 프리뷰 + 일정 ---------- */
 /* 생성 시점이 아니라 '보는 시점' 기준 — 접속할 때마다 D-day가 다시 계산된다 */
 const TODAY = new Date().toLocaleDateString('sv-SE',{timeZone:'Asia/Seoul'});
+/* 경기 당일에는 이 시각(한국시간)이 지나야 다음 경기로 넘어간다 */
+const SWITCH_HOUR = 22;
+const KST_HOUR = +new Date().toLocaleString('en-GB',{timeZone:'Asia/Seoul',hour:'2-digit',hour12:false});
 const upcoming = D.matches
   .filter(m=>m.comp==='K리그' && !m.res)
   .sort((a,b)=>{
@@ -533,11 +536,18 @@ const upcoming = D.matches
     if(a.iso) return -1; if(b.iso) return 1;
     return (a.round||99)-(b.round||99);
   });
-const next = upcoming.find(m=>!m.iso || m.iso>=TODAY) || upcoming[0];
+/* 지난 경기 판정 — 당일 경기는 SWITCH_HOUR 전까지 '다음 경기'로 유지 */
+const isPast = m => {
+  if(!m.iso) return false;                       /* 날짜 미정이면 지나지 않은 것으로 */
+  if(m.iso > TODAY) return false;
+  if(m.iso < TODAY) return true;
+  return KST_HOUR >= SWITCH_HOUR;
+};
+const next = upcoming.find(m=>!isPast(m)) || upcoming[upcoming.length-1];
 const dday = iso => {
   if(!iso) return '';
   const d = Math.round((new Date(iso+'T00:00:00')-new Date(TODAY+'T00:00:00'))/864e5);
-  if(d===0) return '오늘';
+  if(d===0) return KST_HOUR>=SWITCH_HOUR ? '경기 종료' : '오늘';
   if(d===1) return '내일';
   return d>0 ? `D-${d}` : '';
 };
