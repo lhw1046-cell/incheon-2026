@@ -562,7 +562,13 @@ try {
         $sourceGame = if ($resultGame) { $resultGame } else { $scheduleGame }
         $isHome = if ($sourceGame) { $sourceGame.home -eq $incheonKo } else { $false }
         $opp = if ($sourceGame) { if ($isHome) { $sourceGame.away } else { $sourceGame.home } } elseif ($old) { $old.opp } else { $null }
-        $date = if ($sourceGame -and $sourceGame.date) { $sourceGame.date } else { $null }
+        # 경기 당일에는 Soccer365가 날짜 대신 라이브 표기를 보내 파싱이 실패한다.
+        # 이때는 직전 data.json 에 저장돼 있던 일정을 그대로 유지한다.
+        $date = if ($sourceGame -and $sourceGame.date) { $sourceGame.date }
+                elseif ($old -and $old.iso) {
+                    [pscustomobject]@{ display=[string]$old.date; dow=[string]$old.dow; iso=[string]$old.iso }
+                }
+                else { $null }
         [object[]]$scorers = @(); [object[]]$assists = @()
         if ($old -and ($old.scorers -is [System.Array] -or $old.scorers -is [string])) { $scorers = [object[]]@($old.scorers) }
         if ($old -and ($old.assists -is [System.Array] -or $old.assists -is [string])) { $assists = [object[]]@($old.assists) }
