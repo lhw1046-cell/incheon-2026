@@ -130,9 +130,10 @@ matches = [{"comp": cellv(s1, r, 1), "date": cellv(s1, r, 2), "dow": cellv(s1, r
             "att": cellv(s1, r, 21), "ref": cellv(s1, r, 22),
            "iso": to_iso(cellv(s1, r, 2))}
            for r in range(3, 42) if cellv(s1, r, 1)]
+# X열 선수 블록은 41행까지 쓰인다(레안드로 등 시즌 중 영입). 여유 있게 44행까지 읽는다.
 players = [{"name": cellv(s1, r, 24), "app": cellv(s1, r, 25) or 0, "start": cellv(s1, r, 26) or 0,
             "sub": cellv(s1, r, 27) or 0, "g": cellv(s1, r, 28) or 0, "a": cellv(s1, r, 29) or 0,
-            "ga": cellv(s1, r, 30) or 0} for r in range(3, 41) if cellv(s1, r, 24)]
+            "ga": cellv(s1, r, 30) or 0} for r in range(3, 45) if cellv(s1, r, 24)]
 split = [{"k": cellv(s1, r, 39), "pld": cellv(s1, r, 40), "w": cellv(s1, r, 41),
           "d": cellv(s1, r, 42), "l": cellv(s1, r, 43), "pts": cellv(s1, r, 44),
           "gf": cellv(s1, r, 46), "ga": cellv(s1, r, 47), "gd": cellv(s1, r, 48),
