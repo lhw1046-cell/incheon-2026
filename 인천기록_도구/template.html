@@ -10,6 +10,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <!-- End Google Tag Manager -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 <title>인천 유나이티드 2026 · 시즌 대시보드</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
@@ -512,7 +515,8 @@ const topAssist  = leaderOf('a');
 document.getElementById('asof').textContent =
   `${D.asof}  ·  K리그1 ${me.pos}위  ·  ${me.w}승 ${me.d}무 ${me.l}패`;
 document.getElementById('tblAsOf').textContent = D.asof;
-document.getElementById('ftime').textContent = `최종 갱신 ${D.updated}`;
+document.getElementById('ftime').textContent =
+  `최종 갱신 ${D.updated}` + (D.asof?`  ·  ${D.asof}`:'');
 
 /* ---------- KPI ---------- */
 const kl = D.att.kl;
