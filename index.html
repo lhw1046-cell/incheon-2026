@@ -34,7 +34,20 @@ body{background:var(--bg);color:var(--txt);
   background:repeating-linear-gradient(115deg,rgba(255,255,255,.028) 0 2px,transparent 2px 26px);
   pointer-events:none}
 .hero .wrap{position:relative;z-index:2}
-.crest{display:flex;align-items:center;gap:14px;margin-bottom:16px}
+.crest{display:flex;align-items:center;gap:14px;margin-bottom:16px;flex-wrap:wrap}
+/* 블로그 유도 버튼 */
+.blogbtn{margin-left:auto;display:inline-flex;align-items:center;gap:10px;
+  padding:10px 16px;border-radius:12px;text-decoration:none;
+  background:linear-gradient(145deg,#03C75A,#02A44B);color:#04240F;
+  box-shadow:0 4px 16px rgba(3,199,90,.30);transition:transform .12s,box-shadow .12s}
+.blogbtn:hover{transform:translateY(-2px);box-shadow:0 7px 22px rgba(3,199,90,.42)}
+.blogbtn .bt{font-size:14px;font-weight:800;letter-spacing:-.2px;display:block}
+.blogbtn .bs{font-size:11px;font-weight:600;opacity:.72;display:block;margin-top:1px}
+.blogbtn .btxt{display:flex;flex-direction:column;line-height:1.25}
+.blogbtn .ba{font-size:15px;font-weight:800}
+@media(max-width:560px){
+  .blogbtn{margin-left:0;width:100%;justify-content:center}
+}
 .crest .mark{width:46px;height:46px;border-radius:12px;flex:none;
   background:linear-gradient(145deg,var(--sky),var(--blue) 55%,var(--navy));
   display:grid;place-items:center;font-weight:900;font-size:19.5px;color:#fff;
@@ -242,6 +255,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <h1>인천 유나이티드 · 2026 시즌</h1>
       <div class="sub" id="asof"></div>
     </div>
+    <a class="blogbtn" href="https://blog.naver.com/incheonunited2003"
+       target="_blank" rel="noopener">
+      <span class="btxt"><span class="bt">칼럼 보러가기</span><span class="bs">네이버 블로그</span></span>
+      <span class="ba">↗</span>
+    </a>
   </div>
   <div class="kpis" id="kpis"></div>
 </div></div>
@@ -353,6 +371,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 <div class="foot">
   데이터: <b>인천 2026 기록.xlsx</b> · 리그순위 출처 soccer365 / K리그 공식<br>
+  칼럼 · 관전기 → <a href="https://blog.naver.com/incheonunited2003" target="_blank" rel="noopener" style="color:var(--sky);text-decoration:none">blog.naver.com/incheonunited2003</a><br>
   <span id="ftime"></span><br>
   <a class="visits" href="https://hits.sh/lhw1046-cell.github.io/incheon-2026/"
      target="_blank" rel="noopener" title="방문자 수 상세 보기">
