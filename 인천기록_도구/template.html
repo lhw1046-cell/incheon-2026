@@ -588,11 +588,17 @@ if(next){
   const oppForm = ((D.teamMatches||{})[opp]||[]).slice(-5).map(m=>m.res);
   const myForm = league.slice(-5).map(m=>m.res);
   const kpMe = (D.keyPlayers||{})['인천'], kpOpp = (D.keyPlayers||{})[opp];
+  /* 인천 선수는 note 가 없으면 실제 기록에서 자동 계산 (항상 최신) */
+  const kpNote = (team,kp) => {
+    if(kp.note) return kp.note;
+    const s = D.players.find(p=>p.name===kp.name);
+    return s ? `${s.g}골 ${s.a}도움 · ${s.app}경기` : '';
+  };
   const playerCard = (team,kp,fallback) => kp
     ? `<div class="pv-player">
          <div class="av" style="background:${TC[team]}">${kp.name.slice(0,1)}</div>
          <div><div class="n">${kp.name}${kp.pos?`<span style="font-size:11.5px;color:var(--dim);font-weight:600;margin-left:5px">${kp.pos}</span>`:''}</div>
-         <div class="d">${kp.note||''}</div></div>
+         <div class="d">${kpNote(team,kp)}</div></div>
        </div>`
     : `<div class="pv-player"><div class="av" style="background:${TC[team]}">?</div>
          <div><div class="n">—</div><div class="d">${fallback}</div></div></div>`;
