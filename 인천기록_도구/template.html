@@ -245,6 +245,67 @@ tr.gone:hover td{color:#8494ad}
 .ha.A{background:rgba(62,166,232,.16);color:var(--sky)}
 
 .note{font-size:12.5px;color:var(--dim);margin-top:10px;line-height:1.6}
+
+/* ==================== 모바일 (≤600px) — 리그순위표는 손대지 않음 ==================== */
+@media (max-width:600px){
+  .wrap{padding:0 12px}
+  .hero{padding:26px 0 22px}
+  h1{font-size:23px}
+  .kpis{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:16px}
+  .kpi{padding:11px 12px}
+  .kpi .v{font-size:26px}
+  .kpi .l{font-size:11px;letter-spacing:.4px}
+  .kpi .n{font-size:11.5px}
+  section{margin-top:26px}
+  .card{padding:12px;border-radius:14px}
+  h2{font-size:16px}
+
+  /* 선수 기록 — 선발/교체/출전분포 숨김 */
+  #pl th:nth-child(4),#pl td:nth-child(4),
+  #pl th:nth-child(5),#pl td:nth-child(5),
+  #pl th:nth-child(9),#pl td:nth-child(9){display:none}
+  #pl{font-size:13.5px}
+  #pl th,#pl td{padding:8px 4px}
+
+  /* 주심 전적 — 승점 숨김 */
+  #ref th:nth-child(6),#ref td:nth-child(6){display:none}
+
+  /* 경기 결과 — 두 줄로 분리 */
+  .mrow{grid-template-columns:38px 1fr auto auto;
+        grid-template-areas:"r opp opp res" "d sc goals blk";
+        row-gap:3px;padding:10px 4px}
+  .mrow .r{grid-area:r}
+  .mrow .d{grid-area:d}
+  .mrow>div:nth-child(3){grid-area:opp}
+  .mrow .sc{grid-area:sc;justify-self:start;padding:2px 8px}
+  .mrow .goals{grid-area:goals;text-align:left}
+  .mrow .rr{grid-area:res}
+  .mrow .blk{grid-area:blk}
+
+  /* 경기 일정 — 요일 숨김 */
+  .srow{grid-template-columns:38px 70px minmax(0,1fr) 48px}
+  .srow .dw{display:none}
+
+  /* 다음 경기 프리뷰 */
+  .pv{padding:14px}
+  .pv-vs{gap:6px;padding:4px 0 12px}
+  .pv-badge{width:44px;height:44px;font-size:16px;border-radius:12px}
+  .pv-name{font-size:16px}
+  .pv-grid{grid-template-columns:minmax(0,1fr);gap:9px}
+
+  /* 홈 vs 원정 */
+  .split .lbl{min-width:58px;font-size:11px}
+  .bar{min-width:34px}
+
+  /* 이적 리스트 */
+  .mrow2{grid-template-columns:minmax(0,1fr) auto}
+  .mrow2 .club{font-size:12px}
+
+  /* 차트 높이 축소 */
+  .chartbox{height:210px}
+  .chartbox.tall{height:280px}
+}
+
 /* VISITS (hits.sh 배지) */
 .visits{display:inline-block;margin-top:9px;line-height:0;opacity:.9;
   transition:opacity .15s}
@@ -791,7 +852,7 @@ mkChart('cRank',{type:'line',
    {label:'인천',data:POS['인천']||[],borderColor:TC['인천'],backgroundColor:TC['인천'],
     borderWidth:4,pointRadius:4.5,pointBackgroundColor:TC['인천'],
     pointBorderColor:'#08101F',pointBorderWidth:1.6,tension:.25,order:0},
-   ...others.map(t=>({label:t,data:POS[t],
+   ...others.map(t=>({label:t,data:POS[t],hidden:NARROW,
     borderColor:hex2rgba(TC[t]||'#8CA0C3',.48),backgroundColor:TC[t]||'#8CA0C3',
     borderWidth:1.6,pointRadius:0,pointHoverRadius:4.5,
     pointBackgroundColor:TC[t],pointBorderColor:'#08101F',tension:.25,order:5}))]},
@@ -856,7 +917,7 @@ document.getElementById('attNote').innerHTML =
 const gaP = D.players.filter(p=>p.ga>0)
   .sort((a,b)=>b.ga-a.ga || b.g-a.g || a.name.localeCompare(b.name,'ko'));
 /* 선수 수에 맞춰 높이를 늘려야 이름이 하나도 안 잘린다 */
-document.getElementById('gaBox').style.height = (gaP.length*33 + 76) + 'px';
+document.getElementById('gaBox').style.height = (gaP.length*(NARROW?27:33) + 76) + 'px';
 mkChart('cGA',{type:'bar',
  data:{labels:gaP.map(p=>p.name),
   datasets:[{label:'득점',data:gaP.map(p=>p.g),backgroundColor:BLUE,borderRadius:3},
