@@ -880,7 +880,10 @@ mkChart('cRank',{type:'line',
 }
 
 /* 홈/원정 */
-const H=D.split[0],A=D.split[1],T=D.split[2];
+/* split 배열 순서는 갱신 경로에 따라 다르다(홈/원정/총합 vs 전체/홈/원정).
+   순서가 아니라 라벨로 찾아야 안전하다. */
+const pick = (...names) => D.split.find(s=>names.includes(s.k)) || {};
+const H=pick('홈'), A=pick('원정'), T=pick('총합','전체');
 const rows=[['경기','pld'],['승','w'],['무','d'],['패','l'],['승점','pts'],
             ['득점','gf'],['실점','ga']];
 document.getElementById('split').innerHTML = rows.map(([lbl,k])=>{
