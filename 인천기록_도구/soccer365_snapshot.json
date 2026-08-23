@@ -1,10 +1,14 @@
 {
-    "collectedAt":  "2026-08-23T23:27:51",
+    "collectedAt":  "2026-08-24T08:06:27",
     "results":  [
                     {
                         "round":  24,
                         "gameId":  "2400334",
-                        "date":  null,
+                        "date":  {
+                                     "display":  "8월 23일",
+                                     "dow":  "일",
+                                     "iso":  "2026-08-23"
+                                 },
                         "home":  "대전",
                         "away":  "강원",
                         "homeScore":  3,
@@ -14,7 +18,11 @@
                     {
                         "round":  24,
                         "gameId":  "2400335",
-                        "date":  null,
+                        "date":  {
+                                     "display":  "8월 23일",
+                                     "dow":  "일",
+                                     "iso":  "2026-08-23"
+                                 },
                         "home":  "광주",
                         "away":  "인천",
                         "homeScore":  0,
