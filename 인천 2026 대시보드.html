@@ -94,6 +94,10 @@ tr.me:hover{background:linear-gradient(90deg,rgba(226,179,60,.28),rgba(226,179,6
   vertical-align:-3px}
 .tdot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:7px;
   vertical-align:0;box-shadow:0 0 0 1.5px rgba(255,255,255,.10)}
+.pnum{display:inline-block;min-width:22px;text-align:center;font-size:11px;
+  font-weight:800;color:var(--dim);font-variant-numeric:tabular-nums;
+  background:rgba(255,255,255,.06);border-radius:5px;padding:1px 4px;margin-right:7px}
+tr.gone .pnum{color:#4a5670;background:rgba(255,255,255,.03)}
 .ptag{display:inline-block;min-width:26px;text-align:center;font-size:11px;
   font-weight:800;letter-spacing:.4px;padding:2px 5px;border-radius:5px;
   border:1px solid transparent}
@@ -485,6 +489,18 @@ const PPOS = {
            '이준섭':'FW','레안드로':'FW'
 };
 const POSC = {GK:'#E2B33C', DF:'#2BA88A', MF:'#2E9BFF', FW:'#E8574A'};
+
+/* ---------- 등번호 (soccer365 확인분 + 수동 보정) ---------- */
+const PNUM = {
+  '김동헌':1,'이비자':2,'이상기':3,'김건희':4,'이명주':5,'문지환':6,'오후성':7,'이케르':8,
+  '무고사':9,'이동률':10,'제르소':11,'최승구':13,'백민규':14,'서재민':15,'김성민':17,
+  '박호민':19,'박경섭':20,'이태희':21,'정치인':23,'정태욱':25,'여승원':27,'김영환':30,
+  '이상현':31,'이주용':32,'강영훈':34,'김명순':39,'레안드로':70,'이청용':72,'박승호':77,
+  '정원진':88,'페리어':99
+};
+const numTag = n => PNUM[n]
+  ? `<span class="pnum">${PNUM[n]}</span>` : '';
+
 
 /* ---------- 2026 스쿼드 변동 (여기만 고치면 대시보드 전체에 반영) ----------
    type: 완전영입 | 임대영입 | 완전이적 | 임대이적 | 군입대 | 계약해지
@@ -954,7 +970,7 @@ function drawPl(){
     return sortD*(x-y);
   });
   document.querySelector('#pl tbody').innerHTML = rows.map(p=>`
-   <tr class="${OUTMAP[p.name]?'gone':''}"><td>${nameCell(p.name)}</td>
+   <tr class="${OUTMAP[p.name]?'gone':''}"><td>${numTag(p.name)}${nameCell(p.name)}</td>
    <td>${posTag(p.name)||'<span style="color:#4b5670">–</span>'}</td>
    <td>${p.app}</td><td>${p.start}</td><td>${p.sub}</td>
    <td${p.g?' style="color:'+SKY+';font-weight:700"':''}>${p.g}</td>
