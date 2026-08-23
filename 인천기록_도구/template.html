@@ -441,7 +441,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <div id="moveOut"></div>
     </div>
   </div>
-  <div class="note">확인된 건만 표시합니다. 빠진 선수가 있으면 알려주세요.</div>
 </section>
 
 <section>
@@ -485,7 +484,7 @@ const PPOS = {
   /* MF */ '이명주':'MF','서재민':'MF','이청용':'MF','오후성':'MF','백민규':'MF',
            '이케르':'MF','문지환':'MF','정원진':'MF','오준엽':'MF','김영환':'MF','이민혁':'MF',
   /* FW */ '무고사':'FW','페리어':'FW','제르소':'FW','이동률':'FW','정치인':'FW',
-           '박승호':'FW','박호민':'FW','홍시후':'FW','성힘찬':'FW','레안드로':'FW'
+           '박승호':'FW','박호민':'FW','홍시후':'FW','성힘찬':'FW','레안드로':'FW','쇼타':'FW'
 };
 const POSC = {GK:'#E2B33C', DF:'#2BA88A', MF:'#2E9BFF', FW:'#E8574A'};
 
@@ -998,14 +997,14 @@ document.querySelector('#ref tbody').innerHTML =
 
 /* ---------- 임대·군입대 / 영입·이적 리스트 ---------- */
 const statOf = n => D.players.find(p=>p.name===n);
-const moveRow = (m, dir) => {
+const moveRow = (m, dir, showNote=false) => {
   const c = MTYPEC[m.type] || '#8CA0C3';
   const p = m.pos || PPOS[m.name];
   const tag = p ? `<span class="ptag" style="background:${POSC[p]}22;color:${POSC[p]};
     border-color:${POSC[p]}55">${p}</span>` : '';
   const s = statOf(m.name);
   const rec = s && s.app ? `26시즌 ${s.app}경기 ${s.g}골 ${s.a}도움` : '';
-  const sub = [m.note, rec].filter(Boolean).join(' · ');
+  const sub = showNote ? [m.note, rec].filter(Boolean).join(' · ') : '';
   return `<div class="mrow2">
     <div>
       <div class="who">
@@ -1027,7 +1026,7 @@ document.getElementById('moveOut').innerHTML = outThisYear.length ? outThisYear.
 /* 임대·군입대 = 소속은 인천이지만 지금 팀을 떠나 있는 선수 */
 const loans = MOVE_OUT.filter(m=>m.type==='군입대'||m.type==='임대이적');
 document.getElementById('loanList').innerHTML = loans.length
-  ? loans.map(m=>moveRow(m,'out')).join('')
+  ? loans.map(m=>moveRow(m,'out',true)).join('')
   : '<span style="color:var(--dim);font-size:13.5px">현재 임대·군입대 선수가 없습니다.</span>';
 
 /* 경기 결과 (K리그만) */
