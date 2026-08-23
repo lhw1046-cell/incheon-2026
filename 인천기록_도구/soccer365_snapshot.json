@@ -1,6 +1,62 @@
 {
-    "collectedAt":  "2026-08-18T03:54:05",
+    "collectedAt":  "2026-08-23T10:41:56",
     "results":  [
+                    {
+                        "round":  24,
+                        "gameId":  "2400330",
+                        "date":  {
+                                     "display":  "8월 22일",
+                                     "dow":  "토",
+                                     "iso":  "2026-08-22"
+                                 },
+                        "home":  "안양",
+                        "away":  "서울",
+                        "homeScore":  0,
+                        "awayScore":  7,
+                        "href":  "/games/2400330/"
+                    },
+                    {
+                        "round":  24,
+                        "gameId":  "2400331",
+                        "date":  {
+                                     "display":  "8월 22일",
+                                     "dow":  "토",
+                                     "iso":  "2026-08-22"
+                                 },
+                        "home":  "제주",
+                        "away":  "김천",
+                        "homeScore":  0,
+                        "awayScore":  0,
+                        "href":  "/games/2400331/"
+                    },
+                    {
+                        "round":  24,
+                        "gameId":  "2400332",
+                        "date":  {
+                                     "display":  "8월 22일",
+                                     "dow":  "토",
+                                     "iso":  "2026-08-22"
+                                 },
+                        "home":  "전북",
+                        "away":  "울산",
+                        "homeScore":  1,
+                        "awayScore":  0,
+                        "href":  "/games/2400332/"
+                    },
+                    {
+                        "round":  24,
+                        "gameId":  "2400333",
+                        "date":  {
+                                     "display":  "8월 22일",
+                                     "dow":  "토",
+                                     "iso":  "2026-08-22"
+                                 },
+                        "home":  "부천",
+                        "away":  "포항",
+                        "homeScore":  3,
+                        "awayScore":  0,
+                        "href":  "/games/2400333/"
+                    },
                     {
                         "round":  23,
                         "gameId":  "2400327",
@@ -1923,68 +1979,8 @@
     "schedule":  [
                      {
                          "round":  24,
-                         "gameId":  "2400330",
-                         "date":  {
-                                      "display":  "8월 22일",
-                                      "dow":  "토",
-                                      "iso":  "2026-08-22"
-                                  },
-                         "home":  "안양",
-                         "away":  "서울",
-                         "homeScore":  null,
-                         "awayScore":  null,
-                         "href":  "/live/match-anyan-seul-smotret-onlayn/"
-                     },
-                     {
-                         "round":  24,
-                         "gameId":  "2400331",
-                         "date":  {
-                                      "display":  "8월 22일",
-                                      "dow":  "토",
-                                      "iso":  "2026-08-22"
-                                  },
-                         "home":  "제주",
-                         "away":  "김천",
-                         "homeScore":  null,
-                         "awayScore":  null,
-                         "href":  "/live/match-sangju-sangmu-chedju-yunayted-smotret-onlayn/"
-                     },
-                     {
-                         "round":  24,
-                         "gameId":  "2400332",
-                         "date":  {
-                                      "display":  "8월 22일",
-                                      "dow":  "토",
-                                      "iso":  "2026-08-22"
-                                  },
-                         "home":  "전북",
-                         "away":  "울산",
-                         "homeScore":  null,
-                         "awayScore":  null,
-                         "href":  "/live/match-chonbuk-motors-ulsan-hende-smotret-onlayn/"
-                     },
-                     {
-                         "round":  24,
-                         "gameId":  "2400333",
-                         "date":  {
-                                      "display":  "8월 22일",
-                                      "dow":  "토",
-                                      "iso":  "2026-08-22"
-                                  },
-                         "home":  "포항",
-                         "away":  "부천",
-                         "homeScore":  null,
-                         "awayScore":  null,
-                         "href":  "/live/match-puchhon-1995-phohan-stilers-smotret-onlayn/"
-                     },
-                     {
-                         "round":  24,
                          "gameId":  "2400334",
-                         "date":  {
-                                      "display":  "8월 23일",
-                                      "dow":  "일",
-                                      "iso":  "2026-08-23"
-                                  },
+                         "date":  null,
                          "home":  "대전",
                          "away":  "강원",
                          "homeScore":  null,
@@ -1994,11 +1990,7 @@
                      {
                          "round":  24,
                          "gameId":  "2400335",
-                         "date":  {
-                                      "display":  "8월 23일",
-                                      "dow":  "일",
-                                      "iso":  "2026-08-23"
-                                  },
+                         "date":  null,
                          "home":  "광주",
                          "away":  "인천",
                          "homeScore":  null,
@@ -2091,20 +2083,6 @@
                      },
                      {
                          "round":  26,
-                         "gameId":  "2400343",
-                         "date":  {
-                                      "display":  "8월 29일",
-                                      "dow":  "토",
-                                      "iso":  "2026-08-29"
-                                  },
-                         "home":  "울산",
-                         "away":  "김천",
-                         "homeScore":  null,
-                         "awayScore":  null,
-                         "href":  "/live/match-sangju-sangmu-ulsan-hende-smotret-onlayn/"
-                     },
-                     {
-                         "round":  26,
                          "gameId":  "2400342",
                          "date":  {
                                       "display":  "8월 29일",
@@ -2119,31 +2097,31 @@
                      },
                      {
                          "round":  26,
-                         "gameId":  "2400344",
+                         "gameId":  "2400343",
                          "date":  {
-                                      "display":  "8월 30일",
-                                      "dow":  "일",
-                                      "iso":  "2026-08-30"
+                                      "display":  "8월 29일",
+                                      "dow":  "토",
+                                      "iso":  "2026-08-29"
                                   },
-                         "home":  "광주",
-                         "away":  "서울",
+                         "home":  "울산",
+                         "away":  "김천",
                          "homeScore":  null,
                          "awayScore":  null,
-                         "href":  "/live/match-gvangyu-seul-smotret-onlayn/"
+                         "href":  "/live/match-sangju-sangmu-ulsan-hende-smotret-onlayn/"
                      },
                      {
                          "round":  26,
-                         "gameId":  "2400345",
+                         "gameId":  "2400347",
                          "date":  {
                                       "display":  "8월 30일",
                                       "dow":  "일",
                                       "iso":  "2026-08-30"
                                   },
-                         "home":  "인천",
-                         "away":  "전북",
+                         "home":  "포항",
+                         "away":  "강원",
                          "homeScore":  null,
                          "awayScore":  null,
-                         "href":  "/live/match-inchhon-yun-chonbuk-motors-smotret-onlayn/"
+                         "href":  "/live/match-kanvon-phohan-stilers-smotret-onlayn/"
                      },
                      {
                          "round":  26,
@@ -2161,17 +2139,31 @@
                      },
                      {
                          "round":  26,
-                         "gameId":  "2400347",
+                         "gameId":  "2400345",
                          "date":  {
                                       "display":  "8월 30일",
                                       "dow":  "일",
                                       "iso":  "2026-08-30"
                                   },
-                         "home":  "포항",
-                         "away":  "강원",
+                         "home":  "인천",
+                         "away":  "전북",
                          "homeScore":  null,
                          "awayScore":  null,
-                         "href":  "/live/match-kanvon-phohan-stilers-smotret-onlayn/"
+                         "href":  "/live/match-inchhon-yun-chonbuk-motors-smotret-onlayn/"
+                     },
+                     {
+                         "round":  26,
+                         "gameId":  "2400344",
+                         "date":  {
+                                      "display":  "8월 30일",
+                                      "dow":  "일",
+                                      "iso":  "2026-08-30"
+                                  },
+                         "home":  "광주",
+                         "away":  "서울",
+                         "homeScore":  null,
+                         "awayScore":  null,
+                         "href":  "/live/match-gvangyu-seul-smotret-onlayn/"
                      },
                      {
                          "round":  27,
@@ -2287,34 +2279,6 @@
                      },
                      {
                          "round":  28,
-                         "gameId":  "2400359",
-                         "date":  {
-                                      "display":  "9월 9일",
-                                      "dow":  "수",
-                                      "iso":  "2026-09-09"
-                                  },
-                         "home":  "포항",
-                         "away":  "김천",
-                         "homeScore":  null,
-                         "awayScore":  null,
-                         "href":  "/live/match-sangju-sangmu-phohan-stilers-smotret-onlayn/"
-                     },
-                     {
-                         "round":  28,
-                         "gameId":  "2400358",
-                         "date":  {
-                                      "display":  "9월 9일",
-                                      "dow":  "수",
-                                      "iso":  "2026-09-09"
-                                  },
-                         "home":  "광주",
-                         "away":  "제주",
-                         "homeScore":  null,
-                         "awayScore":  null,
-                         "href":  "/live/match-gvangyu-chedju-yunayted-smotret-onlayn/"
-                     },
-                     {
-                         "round":  28,
                          "gameId":  "2400356",
                          "date":  {
                                       "display":  "9월 9일",
@@ -2342,18 +2306,32 @@
                          "href":  "/live/match-kanvon-chonbuk-motors-smotret-onlayn/"
                      },
                      {
-                         "round":  29,
-                         "gameId":  "2400360",
+                         "round":  28,
+                         "gameId":  "2400358",
                          "date":  {
-                                      "display":  "9월 12일",
-                                      "dow":  "토",
-                                      "iso":  "2026-09-12"
+                                      "display":  "9월 9일",
+                                      "dow":  "수",
+                                      "iso":  "2026-09-09"
                                   },
-                         "home":  "부천",
+                         "home":  "광주",
                          "away":  "제주",
                          "homeScore":  null,
                          "awayScore":  null,
-                         "href":  "/live/match-puchhon-1995-chedju-yunayted-smotret-onlayn/"
+                         "href":  "/live/match-gvangyu-chedju-yunayted-smotret-onlayn/"
+                     },
+                     {
+                         "round":  28,
+                         "gameId":  "2400359",
+                         "date":  {
+                                      "display":  "9월 9일",
+                                      "dow":  "수",
+                                      "iso":  "2026-09-09"
+                                  },
+                         "home":  "포항",
+                         "away":  "김천",
+                         "homeScore":  null,
+                         "awayScore":  null,
+                         "href":  "/live/match-sangju-sangmu-phohan-stilers-smotret-onlayn/"
                      },
                      {
                          "round":  29,
@@ -2382,6 +2360,20 @@
                          "homeScore":  null,
                          "awayScore":  null,
                          "href":  "/live/match-inchhon-yun-ulsan-hende-smotret-onlayn/"
+                     },
+                     {
+                         "round":  29,
+                         "gameId":  "2400360",
+                         "date":  {
+                                      "display":  "9월 12일",
+                                      "dow":  "토",
+                                      "iso":  "2026-09-12"
+                                  },
+                         "home":  "부천",
+                         "away":  "제주",
+                         "homeScore":  null,
+                         "awayScore":  null,
+                         "href":  "/live/match-puchhon-1995-chedju-yunayted-smotret-onlayn/"
                      },
                      {
                          "round":  29,
@@ -2780,29 +2772,41 @@
                       {
                           "pos":  1,
                           "team":  "서울",
-                          "pld":  23,
-                          "w":  14,
+                          "pld":  24,
+                          "w":  15,
                           "d":  5,
                           "l":  4,
-                          "gf":  39,
+                          "gf":  46,
                           "ga":  19,
-                          "gd":  20,
-                          "pts":  47
+                          "gd":  27,
+                          "pts":  50
                       },
                       {
                           "pos":  2,
                           "team":  "울산",
-                          "pld":  23,
+                          "pld":  24,
                           "w":  11,
                           "d":  4,
-                          "l":  8,
+                          "l":  9,
                           "gf":  37,
-                          "ga":  33,
-                          "gd":  4,
+                          "ga":  34,
+                          "gd":  3,
                           "pts":  37
                       },
                       {
                           "pos":  3,
+                          "team":  "전북",
+                          "pld":  24,
+                          "w":  10,
+                          "d":  7,
+                          "l":  7,
+                          "gf":  31,
+                          "ga":  22,
+                          "gd":  9,
+                          "pts":  37
+                      },
+                      {
+                          "pos":  4,
                           "team":  "강원",
                           "pld":  22,
                           "w":  9,
@@ -2814,51 +2818,39 @@
                           "pts":  35
                       },
                       {
-                          "pos":  4,
-                          "team":  "전북",
-                          "pld":  23,
-                          "w":  9,
-                          "d":  7,
-                          "l":  7,
-                          "gf":  30,
-                          "ga":  22,
-                          "gd":  8,
-                          "pts":  34
-                      },
-                      {
                           "pos":  5,
                           "team":  "제주",
-                          "pld":  23,
+                          "pld":  24,
                           "w":  9,
-                          "d":  7,
+                          "d":  8,
                           "l":  7,
                           "gf":  27,
                           "ga":  24,
                           "gd":  3,
-                          "pts":  34
+                          "pts":  35
                       },
                       {
                           "pos":  6,
                           "team":  "포항",
-                          "pld":  23,
+                          "pld":  24,
                           "w":  9,
                           "d":  4,
-                          "l":  10,
+                          "l":  11,
                           "gf":  22,
-                          "ga":  25,
-                          "gd":  -3,
+                          "ga":  28,
+                          "gd":  -6,
                           "pts":  31
                       },
                       {
                           "pos":  7,
                           "team":  "안양",
-                          "pld":  23,
+                          "pld":  24,
                           "w":  7,
                           "d":  9,
-                          "l":  7,
+                          "l":  8,
                           "gf":  30,
-                          "ga":  30,
-                          "gd":  0,
+                          "ga":  37,
+                          "gd":  -7,
                           "pts":  30
                       },
                       {
@@ -2876,14 +2868,14 @@
                       {
                           "pos":  9,
                           "team":  "부천",
-                          "pld":  23,
-                          "w":  6,
+                          "pld":  24,
+                          "w":  7,
                           "d":  9,
                           "l":  8,
-                          "gf":  24,
+                          "gf":  27,
                           "ga":  27,
-                          "gd":  -3,
-                          "pts":  27
+                          "gd":  0,
+                          "pts":  30
                       },
                       {
                           "pos":  10,
@@ -2900,14 +2892,14 @@
                       {
                           "pos":  11,
                           "team":  "김천",
-                          "pld":  23,
+                          "pld":  24,
                           "w":  4,
-                          "d":  13,
+                          "d":  14,
                           "l":  6,
                           "gf":  23,
                           "ga":  29,
                           "gd":  -6,
-                          "pts":  25
+                          "pts":  26
                       },
                       {
                           "pos":  12,
