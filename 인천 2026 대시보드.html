@@ -107,7 +107,9 @@ tr.me:hover{background:linear-gradient(90deg,rgba(226,179,60,.28),rgba(226,179,6
 a.badge.blogb{background:linear-gradient(145deg,#03C75A,#02A44B);color:#04240F;
   text-decoration:none;font-weight:800}
 /* 최근 5경기 원형 배지 */
-.frm5{display:flex;gap:4px;justify-content:flex-end}
+.frm5{display:flex;gap:4px;justify-content:center}
+/* 득실과 최근 5경기 사이 간격 + 가운데 정렬 */
+#tbl td:nth-child(11),#tbl th:nth-child(11){padding-left:26px;text-align:center}
 .fc{width:21px;height:21px;border-radius:50%;display:grid;place-items:center;
   font-size:11px;font-weight:800;color:#fff;cursor:help;flex:none;
   box-shadow:0 1px 3px rgba(0,0,0,.35)}
