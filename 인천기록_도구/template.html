@@ -873,7 +873,7 @@ mkChart('cRank',{type:'line',
    {label:'인천',data:POS['인천']||[],borderColor:TC['인천'],backgroundColor:TC['인천'],
     borderWidth:4,pointRadius:4.5,pointBackgroundColor:TC['인천'],
     pointBorderColor:'#08101F',pointBorderWidth:1.6,tension:.25,order:0},
-   ...others.map(t=>({label:t,data:POS[t],hidden:NARROW,
+   ...others.map(t=>({label:t,data:POS[t],hidden:false,   /* 모바일에서도 전 팀 기본 표시 */
     borderColor:hex2rgba(TC[t]||'#8CA0C3',.48),backgroundColor:TC[t]||'#8CA0C3',
     borderWidth:1.6,pointRadius:0,pointHoverRadius:4.5,
     pointBackgroundColor:TC[t],pointBorderColor:'#08101F',tension:.25,order:5}))]},
