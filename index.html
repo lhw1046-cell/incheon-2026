@@ -271,9 +271,10 @@ tr.gone:hover td{color:#8494ad}
   #ref th:nth-child(6),#ref td:nth-child(6){display:none}
 
   /* 경기 결과 — 두 줄로 분리 */
-  .mrow{grid-template-columns:38px 1fr auto auto;
+  .mrow{grid-template-columns:68px minmax(0,1fr) auto auto;
         grid-template-areas:"r opp opp res" "d sc goals blk";
         row-gap:3px;padding:10px 4px}
+  .mrow .r,.mrow .d{white-space:nowrap}
   .mrow .r{grid-area:r}
   .mrow .d{grid-area:d}
   .mrow>div:nth-child(3){grid-area:opp}
