@@ -144,6 +144,11 @@ tr.gone:hover td{color:#8494ad}
 .pos-gd{color:var(--green)} .neg-gd{color:var(--red)}
 #tbl td.gf{color:#3EA6E8;font-weight:700}
 #tbl td.ga{color:#E8574A;font-weight:700}
+#tbl td.pts{color:#E2B33C;font-weight:800}
+.dday{display:inline-block;margin-left:6px;padding:1px 7px;border-radius:999px;
+  font-size:11px;font-weight:800;letter-spacing:.2px;
+  background:#E2B33C22;color:#E2B33C;border:1px solid #E2B33C55}
+.dday.done{background:#4FE39B22;color:#4FE39B;border-color:#4FE39B55}
 
 /* FORM PILLS */
 .form{display:flex;flex-wrap:wrap;gap:5px}
@@ -997,6 +1002,17 @@ document.querySelector('#ref tbody').innerHTML =
 
 /* ---------- 임대·군입대 / 영입·이적 리스트 ---------- */
 const statOf = n => D.players.find(p=>p.name===n);
+/* 군입대 전역일 D-day (KST 기준, 페이지 열 때마다 재계산) */
+const ddayTag = m => {
+  if(m.type!=='군입대') return '';
+  const ds = (m.note||'').match(/\d{4}-\d{2}-\d{2}/g) || [];
+  const out = ds[1]; if(!out) return '';
+  const day = 864e5;
+  const n = Math.round((Date.parse(out+'T00:00:00Z') - Date.parse(TODAY+'T00:00:00Z'))/day);
+  if(n > 0)  return `<span class="dday">D-${n}</span>`;
+  if(n === 0) return `<span class="dday done">D-DAY</span>`;
+  return `<span class="dday done">전역</span>`;
+};
 const moveRow = (m, dir, showNote=false) => {
   const c = MTYPEC[m.type] || '#8CA0C3';
   const p = m.pos || PPOS[m.name];
@@ -1004,7 +1020,8 @@ const moveRow = (m, dir, showNote=false) => {
     border-color:${POSC[p]}55">${p}</span>` : '';
   const s = statOf(m.name);
   const rec = s && s.app ? `26시즌 ${s.app}경기 ${s.g}골 ${s.a}도움` : '';
-  const sub = showNote ? [m.note, rec].filter(Boolean).join(' · ') : '';
+  const sub = showNote
+    ? [m.note ? m.note + ddayTag(m) : '', rec].filter(Boolean).join(' · ') : '';
   return `<div class="mrow2">
     <div>
       <div class="who">
