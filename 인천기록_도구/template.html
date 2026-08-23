@@ -136,6 +136,8 @@ tr.gone:hover td{color:#8494ad}
 .pos{color:var(--dim);font-weight:650}
 .pts{font-weight:800;color:#fff}
 .pos-gd{color:var(--green)} .neg-gd{color:var(--red)}
+#tbl td.gf{color:#3EA6E8;font-weight:700}
+#tbl td.ga{color:#E8574A;font-weight:700}
 
 /* FORM PILLS */
 .form{display:flex;flex-wrap:wrap;gap:5px}
@@ -302,8 +304,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <h2>K리그1 리그순위 <span class="tag" id="tblAsOf"></span></h2>
   <div class="card scroll">
     <table id="tbl"><thead><tr>
-      <th>순위</th><th>팀</th><th>경기</th><th>승</th><th>무</th><th>패</th>
-      <th>득점</th><th>실점</th><th>득실</th><th>승점</th>
+      <th>순위</th><th>팀</th><th>경기</th><th>승점</th><th>승</th><th>무</th><th>패</th>
+      <th>득점</th><th>실점</th><th>득실</th>
       <th style="width:132px">최근 5경기</th>
     </tr></thead><tbody></tbody></table>
     <div class="note">
@@ -550,10 +552,10 @@ document.querySelector('#tbl tbody').innerHTML = D.table.map(t=>`
  <tr class="${t.team==='인천'?'me':''}">
   <td class="pos"><span class="zone" style="background:${zoneOf(t.pos)}"></span>${t.pos}</td>
   <td><span class="tdot" style="background:${TC[t.team]||'#8CA0C3'}"></span>${t.team}</td>
-  <td>${t.pld}</td><td>${t.w}</td><td>${t.d}</td><td>${t.l}</td>
-  <td>${t.gf}</td><td>${t.ga}</td>
+  <td>${t.pld}</td><td class="pts">${t.pts}</td>
+  <td>${t.w}</td><td>${t.d}</td><td>${t.l}</td>
+  <td class="gf">${t.gf}</td><td class="ga">${t.ga}</td>
   <td class="${t.gd>0?'pos-gd':(t.gd<0?'neg-gd':'')}">${t.gd>0?'+':''}${t.gd}</td>
-  <td class="pts">${t.pts}</td>
   <td>${form5(t.team)}</td>
  </tr>`).join('');
 
