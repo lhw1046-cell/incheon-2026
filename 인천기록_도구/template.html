@@ -1024,7 +1024,14 @@ const outThisYear = MOVE_OUT.filter(m=>m.win!=='2025');
 document.getElementById('moveOut').innerHTML = outThisYear.length ? outThisYear.map(m=>moveRow(m,'out')).join('') : empty;
 
 /* 임대·군입대 = 소속은 인천이지만 지금 팀을 떠나 있는 선수 */
-const loans = MOVE_OUT.filter(m=>m.type==='군입대'||m.type==='임대이적');
+const enlistDate = m => ((m.note||'').match(/\d{4}-\d{2}-\d{2}/)||[''])[0];
+const loans = MOVE_OUT.filter(m=>m.type==='군입대'||m.type==='임대이적')
+  .sort((a,b)=>{                       /* 군입대(입대일 순) 먼저, 그 아래 임대 */
+    const ga = a.type==='군입대'?0:1, gb = b.type==='군입대'?0:1;
+    if(ga!==gb) return ga-gb;
+    if(ga===0) return enlistDate(a).localeCompare(enlistDate(b));
+    return 0;
+  });
 document.getElementById('loanList').innerHTML = loans.length
   ? loans.map(m=>moveRow(m,'out',true)).join('')
   : '<span style="color:var(--dim);font-size:13.5px">현재 임대·군입대 선수가 없습니다.</span>';
