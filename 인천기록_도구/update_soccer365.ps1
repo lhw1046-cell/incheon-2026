@@ -168,7 +168,10 @@ function Invoke-PageScript([string]$expression) {
         returnByValue = $true
         awaitPromise = $true
     }
-    if ($result.exceptionDetails) { throw "Soccer365 page parser failed."
+    if ($result.exceptionDetails) {
+        $detail = $result.exceptionDetails.exception.description
+        if (-not $detail) { $detail = $result.exceptionDetails.text }
+        throw "Soccer365 page parser failed. $detail"
     }
     return $result.result.value
 }
@@ -299,8 +302,8 @@ function Get-MatchDetails([string]$gameId, [bool]$incheonIsHome) {
   const teamIndex = $teamIndex;
   const readPlayer = row => {
     const nameNode = row.querySelector('td.player .img16 span');
-    const link = row.querySelector('td.player a[href^=\"/players/\"]');
-    const idMatch = link?.getAttribute('href').match(/\\/players\\/(\\d+)\\//);
+    const link = row.querySelector('td.player a[href^="/players/"]');
+    const idMatch = link?.getAttribute('href').match(/\/players\/(\d+)\//);
     return {name:(nameNode?.textContent || '').trim(), id:idMatch ? idMatch[1] : ''};
   };
   const lineupBlocks = Array.from(document.querySelectorAll('#tm-lineup > div')).filter(x => x.querySelector('table'));
@@ -308,10 +311,10 @@ function Get-MatchDetails([string]$gameId, [bool]$incheonIsHome) {
   const start = Array.from(lineupBlocks[teamIndex]?.querySelectorAll('tr') || []).map(readPlayer).filter(x => x.name);
   const benchRows = Array.from(subBlocks[teamIndex]?.querySelectorAll('tr') || []);
   const bench = benchRows.map(readPlayer).filter(x => x.name);
-  const sub = benchRows.filter(row => row.querySelector('[class*=\"subs_green\"]')).map(readPlayer).filter(x => x.name);
-  const goals = Array.from(document.querySelectorAll('.$sideClass')).filter(x => x.querySelector('.live_goal')).map(x => {
-    const link = x.querySelector('.img16 a[href^=\"/players/\"]');
-    const idMatch = link?.getAttribute('href').match(/\\/players\\/(\\d+)\\//);
+  const sub = benchRows.filter(row => row.querySelector('[class*="subs_green"]')).map(readPlayer).filter(x => x.name);
+  const goals = Array.from(document.querySelectorAll('.$sideClass')).filter(x => x.querySelector('.live_goal, .live_pengoal')).map(x => {
+    const link = x.querySelector('.img16 a[href^="/players/"]');
+    const idMatch = link?.getAttribute('href').match(/\/players\/(\d+)\//);
     return {
       scorer:{name:(x.querySelector('.img16 span')?.textContent || '').trim(),id:idMatch ? idMatch[1] : ''},
       assist:(x.querySelector('.assist')?.textContent || '').trim()

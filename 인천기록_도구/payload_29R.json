@@ -1,0 +1,20 @@
+{
+ "matches": [
+  {"comp": "K리그", "round": 29, "date": "9월 12일", "dow": "토", "opp": "울산", "ha": "원정",
+   "gf": 1, "ga": 2, "scorers": ["무고사"], "assists": [], "ref": "김종혁"}
+ ],
+ "lineups": [
+  {"round": 29, "opp": "울산",
+   "start": ["김동헌", "이비자", "김연수", "이주용", "김명순", "이명주", "제르소", "서재민", "레안드로", "무고사", "이청용"],
+   "sub": ["이동률", "페리어", "정치인", "김성민"]}
+ ],
+ "league_results": {
+  "29": [
+   "Ulsan HD 2 Incheon United 1",
+   "Jeonbuk Hyundai Motors 1 Seoul 2",
+   "Bucheon 1995 2 Jeju United 2",
+   "Daejeon Citizen 2 Pohang Steelers 2"
+  ]
+ },
+ "standings_asof": "2026-09-12 · 29R 4경기 종료"
+}
