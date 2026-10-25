@@ -530,7 +530,13 @@ if ($null -eq $current) { throw "Existing data.json is required for the first mi
 try {
     Start-SoccerBrowser
     $rawResults = Get-CompetitionGames $resultsUrl
-    $rawSchedule = Get-CompetitionGames $scheduleUrl
+    # Schedule page may list no fixtures (e.g. before the final round is announced); do not fail on that
+    try { $rawSchedule = Get-CompetitionGames $scheduleUrl }
+    catch {
+        if ($_.Exception.Message -match "blocked") { throw }
+        Write-Host "[i] Schedule page has no fixtures yet - continuing without it."
+        $rawSchedule = @()
+    }
     $rawStandings = Get-Standings
     $rawPlayerStats = Get-PlayerStats
 
