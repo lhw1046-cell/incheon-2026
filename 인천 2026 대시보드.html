@@ -975,7 +975,11 @@ function drawPl(){
     }
     const x=a[sortK],y=b[sortK];
     if(typeof x==='string') return sortD*x.localeCompare(y,'ko');
-    return sortD*(x-y);
+    const d=sortD*(x-y);
+    if(d) return d;
+    /* 공격포인트가 같으면 득점이 많은 선수가 위 */
+    if(sortK==='ga') return b.g-a.g || b.a-a.a || b.app-a.app;
+    return 0;
   });
   document.querySelector('#pl tbody').innerHTML = rows.map(p=>`
    <tr class="${OUTMAP[p.name]?'gone':''}"><td>${numTag(p.name)}${nameCell(p.name)}</td>
