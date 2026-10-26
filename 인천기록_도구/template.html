@@ -933,11 +933,26 @@ mkChart('cAtt',{type:'line',
    tension:.2,fill:true,
    backgroundColor:(c)=>{const g=c.chart.ctx.createLinearGradient(0,0,0,250);
      g.addColorStop(0,'rgba(226,179,60,.28)');g.addColorStop(1,'rgba(226,179,60,0)');return g;}}]},
- options:{responsive:true,maintainAspectRatio:false,
+ options:{responsive:true,maintainAspectRatio:false,layout:{padding:{top:14,right:10}},
   plugins:{legend:{display:false},tooltip:Object.assign({},tt,{callbacks:{
     title:c=>{const m=attM[c[0].dataIndex];return `${m.round}R vs ${m.opp}`},
     label:c=>fmt(c.raw)+'명'}})},
-  scales:{x:axis(),y:axis({ticks:{callback:v=>(v/1000)+'k'}})}}});
+  scales:{x:axis(),y:axis({ticks:{callback:v=>(v/1000)+'k'}})}},
+ /* 점 위에 관중 수 표시 (폭이 좁으면 1.8만 → 18.1k 식으로 줄임) */
+ plugins:[{id:'attLabels',afterDatasetsDraw(ch){
+   const {ctx}=ch, meta=ch.getDatasetMeta(0), pts=meta.data; if(pts.length<2) return;
+   const step=Math.abs(pts[1].x-pts[0].x), short=step<50;
+   ctx.save(); ctx.font='600 '+(short?10:11.5)+'px sans-serif';
+   ctx.fillStyle=getComputedStyle(document.documentElement).getPropertyValue('--txt').trim()||'#E8EEF8';
+   ctx.textAlign='center';
+   pts.forEach((pt,i)=>{const v=attM[i].att, tx=short?(v/1000).toFixed(1)+'k':v.toLocaleString('ko-KR');
+     const pv=i>0?attM[i-1].att:Infinity, nx=i<pts.length-1?attM[i+1].att:Infinity;
+     const valley = v<pv && v<nx;            /* 골짜기 점은 아래쪽에 표시 */
+     const w=ctx.measureText(tx).width/2+2;
+     const x=Math.min(Math.max(pt.x,w),ch.width-w);
+     ctx.textBaseline=valley?'top':'bottom';
+     ctx.fillText(tx,x,valley?pt.y+8:pt.y-8);});
+   ctx.restore();}}]});
 document.getElementById('attNote').innerHTML =
  `홈 ${kl.n}경기 · 총 ${fmt(kl.tot)}명 · 평균 <b>${fmt(Math.round(kl.avg))}명</b>
   (2025년 ${fmt(Math.round(kl.py_avg))}명 대비 <b style="color:${kl.yoy>=0?GREEN:RED}">
