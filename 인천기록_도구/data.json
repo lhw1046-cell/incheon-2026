@@ -720,11 +720,11 @@
                     },
                     {
                         "comp":  "K리그",
-                        "date":  null,
-                        "dow":  null,
+                        "date":  "11월 1일",
+                        "dow":  "일",
                         "round":  34,
-                        "opp":  null,
-                        "ha":  null,
+                        "opp":  "서울",
+                        "ha":  "원정",
                         "gf":  null,
                         "ga":  null,
                         "res":  null,
@@ -736,16 +736,16 @@
                                     ],
                         "att":  null,
                         "ref":  null,
-                        "iso":  null,
+                        "iso":  "2026-11-01",
                         "gameId":  null
                     },
                     {
                         "comp":  "K리그",
-                        "date":  null,
-                        "dow":  null,
+                        "date":  "11월 8일",
+                        "dow":  "일",
                         "round":  35,
-                        "opp":  null,
-                        "ha":  null,
+                        "opp":  "대전",
+                        "ha":  "원정",
                         "gf":  null,
                         "ga":  null,
                         "res":  null,
@@ -757,16 +757,16 @@
                                     ],
                         "att":  null,
                         "ref":  null,
-                        "iso":  null,
+                        "iso":  "2026-11-08",
                         "gameId":  null
                     },
                     {
                         "comp":  "K리그",
-                        "date":  null,
-                        "dow":  null,
+                        "date":  "11월 21일",
+                        "dow":  "토",
                         "round":  36,
-                        "opp":  null,
-                        "ha":  null,
+                        "opp":  "울산",
+                        "ha":  "홈",
                         "gf":  null,
                         "ga":  null,
                         "res":  null,
@@ -778,16 +778,16 @@
                                     ],
                         "att":  null,
                         "ref":  null,
-                        "iso":  null,
+                        "iso":  "2026-11-21",
                         "gameId":  null
                     },
                     {
                         "comp":  "K리그",
-                        "date":  null,
-                        "dow":  null,
+                        "date":  "11월 29일",
+                        "dow":  "일",
                         "round":  37,
-                        "opp":  null,
-                        "ha":  null,
+                        "opp":  "강원",
+                        "ha":  "홈",
                         "gf":  null,
                         "ga":  null,
                         "res":  null,
@@ -799,16 +799,16 @@
                                     ],
                         "att":  null,
                         "ref":  null,
-                        "iso":  null,
+                        "iso":  "2026-11-29",
                         "gameId":  null
                     },
                     {
                         "comp":  "K리그",
-                        "date":  null,
-                        "dow":  null,
+                        "date":  "12월 6일",
+                        "dow":  "일",
                         "round":  38,
-                        "opp":  null,
-                        "ha":  null,
+                        "opp":  "전북",
+                        "ha":  "원정",
                         "gf":  null,
                         "ga":  null,
                         "res":  null,
@@ -820,7 +820,7 @@
                                     ],
                         "att":  null,
                         "ref":  null,
-                        "iso":  null,
+                        "iso":  "2026-12-06",
                         "gameId":  null
                     },
                     {
@@ -2502,7 +2502,7 @@
                     },
                     {
                         "round":  34,
-                        "opp":  null,
+                        "opp":  "서울",
                         "start":  [
 
                                   ],
@@ -2515,7 +2515,7 @@
                     },
                     {
                         "round":  35,
-                        "opp":  null,
+                        "opp":  "대전",
                         "start":  [
 
                                   ],
@@ -2528,7 +2528,7 @@
                     },
                     {
                         "round":  36,
-                        "opp":  null,
+                        "opp":  "울산",
                         "start":  [
 
                                   ],
@@ -2541,7 +2541,7 @@
                     },
                     {
                         "round":  37,
-                        "opp":  null,
+                        "opp":  "강원",
                         "start":  [
 
                                   ],
@@ -2554,7 +2554,7 @@
                     },
                     {
                         "round":  38,
-                        "opp":  null,
+                        "opp":  "전북",
                         "start":  [
 
                                   ],
@@ -6243,8 +6243,8 @@
                                   "pos":  "MF"
                               }
                    },
-    "today":  "2026-10-25",
-    "updated":  "2026-10-25",
+    "today":  "2026-10-26",
+    "updated":  "2026-10-26",
     "asof":  "2026-10-24 - 33R 종료",
     "sources":  {
                     "competition":  "https://soccer365.net/competitions/637/",

@@ -605,7 +605,7 @@ try {
             }
             $match = [ordered]@{ comp=$config.labels.competition; date=$date.display; dow=$date.dow; round=$round; opp=$opp; ha=$(if($isHome){$config.labels.home}else{$config.labels.away}); gf=$gf; ga=$ga; res=$(Get-ResultLabel $gf $ga); scorers=[object[]]$scorers; assists=[object[]]$assists; att=$att; ref=$ref; iso=$date.iso; gameId=$resultGame.gameId }
         } else {
-            $match = [ordered]@{ comp=$config.labels.competition; date=$(if($date){$date.display}else{$null}); dow=$(if($date){$date.dow}else{$null}); round=$round; opp=$opp; ha=$(if($sourceGame){if($isHome){$config.labels.home}else{$config.labels.away}}else{$null}); gf=$null; ga=$null; res=$null; scorers=@(); assists=@(); att=$null; ref=$null; iso=$(if($date){$date.iso}else{$null}); gameId=$null }
+            $match = [ordered]@{ comp=$config.labels.competition; date=$(if($date){$date.display}else{$null}); dow=$(if($date){$date.dow}else{$null}); round=$round; opp=$opp; ha=$(if($sourceGame){if($isHome){$config.labels.home}else{$config.labels.away}}elseif($old){$old.ha}else{$null}); gf=$null; ga=$null; res=$null; scorers=@(); assists=@(); att=$null; ref=$null; iso=$(if($date){$date.iso}else{$null}); gameId=$null }
             $start=[object[]]@(); $sub=[object[]]@(); $bench=[object[]]@()
         }
         $matches += ,$match
