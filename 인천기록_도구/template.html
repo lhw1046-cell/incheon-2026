@@ -925,7 +925,7 @@ document.getElementById('split').innerHTML = rows.map(([lbl,k])=>{
   오른쪽 <b style="color:var(--green)">원정 ${A.pld}경기</b> · 총 ${T.pld}경기 승점 ${T.pts}</div>`;
 
 /* 관중 (K리그만) */
-const attM = D.matches.filter(m=>m.att && m.comp==='K리그');
+const attM = D.matches.filter(m=>m.att && m.comp==='K리그' && m.ha==='홈'); /* 홈경기만 (원정 관중 제외) */
 mkChart('cAtt',{type:'line',
  data:{labels:attM.map(m=>'R'+m.round),
   datasets:[{label:'관중',data:attM.map(m=>m.att),borderColor:GOLD,borderWidth:2.5,
